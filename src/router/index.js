@@ -6,9 +6,78 @@ Vue.use(VueRouter)
 
 const routes = [
   {
-    path: '/',
+    path: '/home',
     name: 'home',
     component: HomeView
+  },
+  {
+    path: '/',
+    redirect:'/home'
+  },
+  {
+    path: '/my',
+    name: 'my',
+    component: () => import('../views/MyView.vue')
+  },
+  {
+    path: '/you',
+    name: 'you',
+    component: () => import('../views/YouView.vue')
+  },
+  {
+    path: '/tree',
+    name: 'tree',
+    component: () => import('../views/TreeView.vue')
+  },
+  {
+    path: '/table',
+    name: 'table',
+    component: () => import('../views/TableView.vue')
+  },
+  {
+    path: '/tabs',
+    name: 'tabs',
+    component: () => import('../views/TabsView.vue')
+  },
+  {
+    path: '/detail',
+    name: 'detail',
+    component: () => import('../views/DetailView.vue')
+  },
+  {
+    path: '/area',
+    name: 'area',
+    component: () => import('../views/AreaSelectMultiple.vue')
+  },
+  {
+    path: '/map',
+    name: 'map',
+    component: () => import('../views/MapView.vue')
+  },
+  {
+    path: '/treechart',
+    name: 'treechart',
+    component: () => import('../views/OrganizationChart.vue')
+  },
+  {
+    path: '/baidu',
+    name: 'baidu',
+    component: () => import('../views/BaiduMap.vue')
+  },
+  {
+    path: '/chart',
+    name: 'chart',
+    component: () => import('../views/ChartView.vue')
+  },
+  {
+    path: '/right',
+    name: 'right',
+    component: () => import('../views/RightClick.vue')
+  },
+  {
+    path: '/enterprise',
+    name: 'enterprise',
+    component: () => import('../views/EnterpriseView.vue')
   },
   {
     path: '/about',

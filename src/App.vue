@@ -2,9 +2,23 @@
   <div id="app">
     <nav>
       <router-link to="/">Home</router-link> |
-      <router-link to="/about">About</router-link>
+      <router-link to="/about">About</router-link> |
+      <router-link to="/my">My</router-link> |
+      <router-link to="/you">You</router-link> |
+      <router-link to="/tree">Tree</router-link> |
+      <router-link to="/table">Table</router-link> |
+      <router-link to="/detail">Detail</router-link> |
+      <router-link to="/area">Arae</router-link> |
+      <router-link to="/treechart">TreeChart</router-link> |
+      <router-link to="/map">Map</router-link> |
+      <router-link to="/baidu">baidu</router-link> |
+      <router-link to="/chart">Chart</router-link> |
+      <router-link to="/enterprise">Enterprise</router-link> |
+      <router-link to="/right">RightClick</router-link> |
     </nav>
-    <router-view/>
+    <keep-alive include="TreeItem">
+      <router-view/>
+    </keep-alive>
   </div>
 </template>
 
@@ -15,6 +29,7 @@
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
   color: #2c3e50;
+  height: 100vh;
 }
 
 nav {
