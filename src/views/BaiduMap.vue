@@ -1,8 +1,9 @@
 <template>
 
     <div>
-      <el-input id="searchInput" v-model="keyword" type="text" style="width: 20%">
+      <el-input id="searchInput" v-model="keyword" type="text" style="width: 20%;margin-bottom: 20px;">
       </el-input>
+
       <baidu-map
       :zoomEnable="true"
       class="bm-view"
@@ -15,14 +16,23 @@
     >
     <!--搜索-->
  
-        <!-- :panel="isShowPanel" -->
-        <!-- @searchcomplete="searchcomplete" -->
-      <bm-local-search
+    <!-- @searchcomplete="searchcomplete" -->
+    <bm-local-search
+        :panel="isShowPanel"
         :keyword="keyword"
         :auto-viewport="true"
-        location="北京"
+        CustomData="CustomData"
+        :pageCapacity="10"
       ></bm-local-search>
+      <bml-heatmap
+        :data="hotData"
+        :max="100"
+        :radius="20"
+      >
 
+      </bml-heatmap>
+      <bm-map-type :map-types="['BMAP_NORMAL_MAP', 'BMAP_HYBRID_MAP']" anchor="BMAP_ANCHOR_TOP_RIGHT"></bm-map-type>
+      <!-- <bm-panorama></bm-panorama> -->
       <bm-city-list anchor="BMAP_ANCHOR_TOP_LEFT"></bm-city-list>
       <bm-geolocation anchor="BMAP_ANCHOR_BOTTOM_RIGHT" :showAddressBar="true" :autoLocation="true" @locationSuccess="handleLocation"></bm-geolocation>
       <!-- 缩放控件 -->
@@ -30,11 +40,13 @@
       <bm-marker :position="location" :dragging="true">
         <bm-info-window
           :show="show"
+          :width="0"
+          :height="0"
           @close="infoWindowClose"
           @open="infoWindowOpen"
           style="font-size: 14px"
         >
-          <p>地点：{{ site ? site : '北京' }}</p>
+          <p>地点：{{ site }}</p>
         </bm-info-window>
       </bm-marker>
 
@@ -50,6 +62,9 @@ import {
   BmMarker,
   BmInfoWindow,
   BmLocalSearch,
+  BmMapType,
+  // BmPanorama,
+  BmlHeatmap,
   BmGeolocation,
 } from "vue-baidu-map";
 export default {
@@ -61,24 +76,36 @@ export default {
     BmMarker,
     BmInfoWindow,
     BmLocalSearch,
+    BmMapType,
+    BmlHeatmap,
+    // BmPanorama,
     BmGeolocation,
   },
   data() {
     return {
       site: "",
       keyword:'',
-      show: true,
-      // isShowPanel: true,
-      location: { lng: 116.4, lat: 39.9 },
+      show: false,
+      isShowPanel: false,
+      location: { lng: 0, lat: 0 },
+      // location: { lng: 116.4, lat: 39.9 },
       center: { lng: 0, lat: 0 },
       zoom: 12,
       markerPoint: { lng: 116.4, lat: 39.9 },
+      hotData:[
+        {lng:116.418261,lat:39.921984,count:50},
+        {lng:116.423332,lat:39.916532,count:51},
+        {lng:116.419787,lat:39.930658,count:15},
+        {lng:116.431264,lat:39.921984,count:50},
+        {lng:116.485653,lat:39.916532,count:51},
+        {lng:116.421465,lat:39.930658,count:87},
+        {lng:116.476457,lat:39.921984,count:64},
+        {lng:116.489024,lat:39.916532,count:51},
+        {lng:116.408623,lat:39.930658,count:99},
+      ]
     };
   },
   methods: {
-    // searchcomplete(arr) {
-    //   this.isShowPanel = true;
-    // },
     handleLocation(e){
       let geocoder = new BMap.Geocoder(); //创建地址解析器的实例
       geocoder.getLocation(e.point, (rs) => {
@@ -114,6 +141,7 @@ export default {
       this.location.lat = e.point.lat;
       let geocoder = new BMap.Geocoder(); //创建地址解析器的实例
       geocoder.getLocation(e.point, (rs) => {
+        console.log(rs)
         this.site = rs.address;
         // this.add.site = rs.address;
         //地址描述(string)=
@@ -131,7 +159,6 @@ export default {
     handler({ BMap, map }) {
       console.log(BMap, map);
       map.enableScrollWheelZoom(true);
-      // BMap.enableScrollWheelZoom()
       this.center.lng = 116.404;
       this.center.lat = 39.915;
       this.zoom = 15;

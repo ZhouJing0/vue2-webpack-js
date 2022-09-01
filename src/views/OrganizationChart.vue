@@ -1,1130 +1,503 @@
 <template>
-  <div class="tree04">
-    <div class="seeTree-page" id="app">
-      <div id="treeRoot"></div>
-      <!-- <ul id="menuBox">
-        <li>全选 ctrl+A</li>
-        <li  @click="crtlC">复制 ctrl+C</li>
-        <li>剪切 ctrl+X</li>
-        <li>粘贴 ctrl+V</li>
-    </ul> -->
+  <div>
+    <div
+      v-loading="g_loading"
+      style="
+        margin-top: 50px;
+        width: calc(100% - 10px);
+        height: calc(100vh - 140px);
+      "
+    >
+      <SeeksRelationGraph
+        ref="seeksRelationGraph"
+        :options="graphOptions"
+        :on-node-expand="onNodeExpand"
+      />
     </div>
   </div>
 </template>
 
-
 <script>
-
-import { VueContext } from 'vue-context';
-import companyJson from "./DLJSON/companyJson.json";
-import $ from "./DLJSON/jquery.min";
-import * as d3 from "./DLJSON/d3.v5";
-let svg;
-let dirRight;
-let forUpward;
-let leng;
-// var u = navigator.userAgent
-//   app = navigator.appVersion;
-// var isAndroid = u.indexOf("Android") > -1 || u.indexOf("Linux") > -1; //g
-// var isIOS = !!u.match(/\(i[^;]+;( U;)? CPU.+Mac OS X/); //ios终端
-// var ua = navigator.userAgent.toLowerCase();
-// var ualower = navigator.userAgent.toLocaleLowerCase();
-// //var treeData =
-// var width = document.body.clientWidth,
-//   height = document.body.clientHeight;
-let toggle = true;
-let circlewidth1;
-let circlewidth2;
-let circlewidth3;
-let margin1 = { top: 50, right: 20, bottom: -20, left: 0 };
+import SeeksRelationGraph from "relation-graph";
 export default {
+  name: "OrganizationChart",
+  components: { SeeksRelationGraph },
   data() {
     return {
-      container: null, //容器svg>g
-      duration: 500, //动画持续时间
-      scaleRange: [0.2, 2], //container缩放范围
-      direction: ["r", "l"], //分为左右2个方向
-      centralPoint: [0, 0], //画布中心点坐标x,y
-      root: { r: {}, l: {} }, //左右2块数据源
-      rootNodeLength: 0, //根节点名称长度
-      rootName: ["昆仑数智", ""], //根节点名称
-      textSpace: 15, //多行文字间距
-      themeColor: "#2196F3", //主色
-      nodeSize: [50, 100], //节点间距(高/水平)
-      fontSize: 14, //字体大小，也是单字所占宽高
-      rectMinWidth: 50, //节点方框默认最小，
-      textPadding: 5, //文字与方框间距,注：固定值5
-      circleR: 5, //圆圈半径
-      dirRight: "",
-      treeData: [],
+      g_loading: true,
+      demoname: "---",
+      graphOptions: {
+        backgrounImage: "http://ai-mark.cn/images/ai-mark-desc.png",
+        backgrounImageNoRepeat: true,
+        layouts: [
+          {
+            label: "中心",
+            layoutName: "tree",
+            layoutClassName: "seeks-layout-tree",
+            defaultJunctionPoint: "border",
+            defaultNodeShape: 0,
+            defaultLineShape: 1,
+            centerOffset_x: -300,
+            centerOffset_y: 0,
+            min_per_width: "60",
+            min_per_height: "400",
+          },
+        ],
+        defaultExpandHolderPosition: "bottom",
+        defaultLineShape: 4,
+        defaultJunctionPoint: "tb",
+        defaultNodeShape: 1,
+        defaultNodeWidth: "50",
+        defaultNodeHeight: "250",
+        defaultNodeBorderWidth: 0,
+      },
     };
   },
   created() {},
   mounted() {
-    this.getData();
+    this.demoname = this.$route.params.demoname;
+    this.setGraphData();
   },
-  computed: {
-    treeMap() {
-      return d3
-        .tree()
-        .nodeSize(this.nodeSize)
-        .separation((a, b) => {
-          let result =
-            a.parent === b.parent && !a.children && !b.children ? 1 : 2;
-          return result;
-        });
-    },
-  },
-  watch: {},
   methods: {
-    // crtlC(){
-    //   var menuBox = document.querySelector("#menuBox");
-    //   console.log('aaaaaaaa')
-    //   menuBox.style.display = "none";
-    // },
-    getData() {
-      // var mynodes;
-      // $.ajax({
-      //     url: "first.json",
-      //     contentType: "application/json;charset=UTF-8",
-      //     type: "POST",
-      //     dataType: "json",
-
-      //     success: function (data) {
-      this.rootName = [companyJson.data.rootName, ""];
-      let data = companyJson.data;
-      console.log(data, "原始数据");
-      let left = data.l;
-      let right = data.r;
-      let mynodes;
-      for (var i = 0; i < left.children.length; i++) {
-        if (left.children[i].children.length > 2) {
-          mynodes = left.children[i].children;
-          left.children[i].children = left.children[i].children.slice(0, 2);
-          left.children[i].children[2] = {
-            name: "更多",
-            type: -1,
-            val: mynodes.length - 2,
-            childrend: mynodes.slice(0, mynodes.length),
-          };
+    setGraphData() {
+      var __graph_json_data = {
+        rootId: "N1",
+        nodes: [
+          { id: "N1", text: "深圳市腾讯计算机系统有限公司", color: "#2E4E8F" },
+          { id: "N2", text: "张志东", color: "#4ea2f0" },
+          { id: "N3", text: "陈一丹", color: "#4ea2f0" },
+          { id: "N4", text: "许晨晔", color: "#4ea2f0" },
+          { id: "N5", text: "马化腾", color: "#4ea2f0" },
+          { id: "N6", text: "腾讯云科技有限公司", color: "#4ea2f0" },
+          { id: "N7", text: "腾讯医疗健康（深圳）有限公司", color: "#4ea2f0" },
+          {
+            id: "N8",
+            text: "深圳市腾讯视频文化传播有限公司",
+            color: "#4ea2f0",
+          },
+          { id: "N9", text: "星创互联（北京）科技有限公司", color: "#4ea2f0" },
+          {
+            id: "N10",
+            text: "苏州钟鼎创业二号投资中心（有限合伙）",
+            color: "#4ea2f0",
+          },
+          { id: "N11", text: "北京驿码神通信息技术有限公司", color: "#4ea2f0" },
+          {
+            id: "N12",
+            text: "张家界（北京驿码神通）信息技术有限公司",
+            color: "#4ea2f0",
+          },
+          {
+            id: "N13",
+            text: "滨海（天津）金融资产交易中心股份有限公司",
+            color: "#4ea2f0",
+          },
+          { id: "N14", text: "深圳腾富博投资有限公司", color: "#4ea2f0" },
+          { id: "N15", text: "腾讯影业文化传播有限公司", color: "#4ea2f0" },
+          {
+            id: "N16",
+            text: "霍尔果斯晓腾影业文化传播有限公司",
+            color: "#4ea2f0",
+          },
+          {
+            id: "N17",
+            text: "苍穹互娱（天津）文化传播有限公司",
+            color: "#4ea2f0",
+          },
+          { id: "N18", text: "北京腾讯影业有限公司", color: "#4ea2f0" },
+          { id: "N19", text: "霍尔果斯腾影影视发行有限公司", color: "#4ea2f0" },
+          { id: "N20", text: "上海腾闻网络科技有限公司", color: "#4ea2f0" },
+          { id: "N21", text: "上海宝申数字科技有限公司", color: "#4ea2f0" },
+          { id: "N22", text: "海南高灯科技有限公司", color: "#4ea2f0" },
+          { id: "N23", text: "益盟股份有限公司", color: "#4ea2f0" },
+          { id: "N24", text: "北京魔方无限科技有限公司", color: "#4ea2f0" },
+          { id: "N25", text: "北京像素软件科技股份有限公司", color: "#4ea2f0" },
+          {
+            id: "N26",
+            text: "深圳市世纪腾华信息技术有限公司",
+            color: "#4ea2f0",
+          },
+          { id: "N27", text: "浙江齐聚科技有限公司", color: "#4ea2f0" },
+          { id: "N28", text: "未来电视有限公司", color: "#4ea2f0" },
+          { id: "N29", text: "北京腾新科技有限公司", color: "#4ea2f0" },
+          {
+            id: "N30",
+            text: "河北雄安新区腾讯计算机系统有限公司",
+            color: "#4ea2f0",
+          },
+          { id: "N31", text: "深圳市企鹅金融科技有限公司", color: "#4ea2f0" },
+          { id: "N32", text: "深圳市移卡科技有限公司", color: "#4ea2f0" },
+          { id: "N33", text: "财付通支付科技有限公司", color: "#4ea2f0" },
+          { id: "N34", text: "金保信社保卡科技有限公司", color: "#4ea2f0" },
+          { id: "N35", text: "网联清算有限公司", color: "#4ea2f0" },
+          { id: "N36", text: "北京搜狗信息服务有限公司", color: "#4ea2f0" },
+          { id: "N37", text: "北京网罗天下生活科技有限公司", color: "#4ea2f0" },
+          { id: "N120", text: "深圳市腾讯商业管理有限公司", color: "#4ea2f0" },
+          { id: "N121", text: "深圳市智税链科技有限公司", color: "#4ea2f0" },
+          {
+            id: "N122",
+            text: "横琴红土创新创业投资合伙企业（有限合伙）",
+            color: "#4ea2f0",
+          },
+          {
+            id: "N123",
+            text: "上海挚信新经济一期股权投资合伙企业（有限合伙）",
+            color: "#4ea2f0",
+          },
+          {
+            id: "N124",
+            text: "上海云锋股权投资中心（有限合伙）",
+            color: "#4ea2f0",
+          },
+          {
+            id: "N125",
+            text: "北京创新工场投资中心（有限合伙）",
+            color: "#4ea2f0",
+          },
+          {
+            id: "N126",
+            text: "广州市擎天柱网络科技有限公司",
+            color: "#4ea2f0",
+          },
+          { id: "N127", text: "河南腾河网络科技有限公司", color: "#4ea2f0" },
+          {
+            id: "N128",
+            text: "深圳市财付通网络金融小额贷款有限公司",
+            color: "#4ea2f0",
+          },
+          {
+            id: "N129",
+            text: "湖北腾楚网络科技有限责任公司",
+            color: "#4ea2f0",
+          },
+          { id: "N130", text: "腾讯征信有限公司", color: "#4ea2f0" },
+          { id: "N131", text: "百行征信有限公司", color: "#4ea2f0" },
+          {
+            id: "N132",
+            text: "广东腾南网络信息科技有限公司",
+            color: "#4ea2f0",
+          },
+          {
+            id: "N133",
+            text: "深圳市腾南网络信息科技有限公司",
+            color: "#4ea2f0",
+          },
+          { id: "N134", text: "广州腾威会展有限公司", color: "#4ea2f0" },
+          { id: "N135", text: "广州南极广告传媒有限公司", color: "#4ea2f0" },
+          { id: "N136", text: "广州壹糖网络科技有限公司", color: "#4ea2f0" },
+          { id: "N137", text: "广州玩心艺网络科技有限公司", color: "#4ea2f0" },
+          {
+            id: "N138",
+            text: "广东腾南网络信息科技有限公司深圳分公司",
+            color: "#4ea2f0",
+          },
+          {
+            id: "N139",
+            text: "珠海横琴腾南网络信息科技有限公司",
+            color: "#4ea2f0",
+          },
+          {
+            id: "N140",
+            text: "这个节点原本是没有子节点的",
+            color: "rgba(255, 120, 0, 1)",
+            fontColor: "#000000",
+          },
+          {
+            id: "N141",
+            text: "上海腾讯企鹅影视文化传播有限公司",
+            color: "#4ea2f0",
+          },
+          { id: "N142", text: "海南周天娱乐有限公司", color: "#4ea2f0" },
+          {
+            id: "N143",
+            text: "杭州红杉合远股权投资合伙企业（有限合伙）",
+            color: "#4ea2f0",
+          },
+          { id: "N144", text: "广州银汉科技有限公司", color: "#4ea2f0" },
+          { id: "N145", text: "深圳市文娱华彩科技有限公司", color: "#4ea2f0" },
+          { id: "N146", text: "林芝文娱本源科技有限公司", color: "#4ea2f0" },
+          { id: "N147", text: "深圳市文娱华章科技有限公司", color: "#4ea2f0" },
+          {
+            id: "N148",
+            text: "腾讯大地通途（北京）科技有限公司",
+            color: "#4ea2f0",
+          },
+          {
+            id: "N149",
+            text: "苏州钟鼎三号创业投资中心（有限合伙）",
+            color: "#4ea2f0",
+          },
+          {
+            id: "N150",
+            text: "永杨安风（北京）科技股份有限公司",
+            color: "#4ea2f0",
+          },
+          {
+            id: "N151",
+            text: "霍尔果斯永杨安风网络科技有限公司",
+            color: "#4ea2f0",
+          },
+          { id: "N152", text: "辽宁腾辽科技有限公司", color: "#4ea2f0" },
+          { id: "N153", text: "沈阳小黄牛网络科技有限公司", color: "#4ea2f0" },
+          { id: "N154", text: "深圳市泰捷软件技术有限公司", color: "#4ea2f0" },
+          {
+            id: "N155",
+            text: "众安在线财产保险股份有限公司",
+            color: "#4ea2f0",
+          },
+          { id: "N156", text: "深圳市腾讯动漫有限公司", color: "#4ea2f0" },
+          { id: "N157", text: "北京奇迹开元文化有限公司", color: "#4ea2f0" },
+          { id: "N158", text: "浙江腾讯影业有限公司", color: "#4ea2f0" },
+          {
+            id: "N159",
+            text: "北京醋溜网络科技股份有限公司",
+            color: "#4ea2f0",
+          },
+          {
+            id: "N160",
+            text: "甘肃刚泰控股（集团）股份有限公司",
+            color: "#4ea2f0",
+          },
+          { id: "N161", text: "浙江腾越网络科技有限公司", color: "#4ea2f0" },
+          { id: "N162", text: "杭州热秀网络技术有限公司", color: "#4ea2f0" },
+          { id: "N163", text: "浙江腾趣网络科技有限公司", color: "#4ea2f0" },
+          { id: "N164", text: "湖南腾湘科技有限公司", color: "#4ea2f0" },
+          { id: "N165", text: "湖南绘装网络科技有限公司", color: "#4ea2f0" },
+          { id: "N166", text: "华谊兄弟传媒股份有限公司", color: "#4ea2f0" },
+          { id: "N167", text: "无锡买卖宝信息技术有限公司", color: "#4ea2f0" },
+          { id: "N168", text: "优扬文化传媒股份有限公司", color: "#4ea2f0" },
+          {
+            id: "N169",
+            text: "武汉鲨鱼网络直播技术有限公司",
+            color: "#4ea2f0",
+          },
+          {
+            id: "N170",
+            text: "深圳市腾讯网域计算机网络有限公司",
+            color: "#4ea2f0",
+          },
+          { id: "N171", text: "厦门国际金融技术有限公司", color: "#4ea2f0" },
+          { id: "N172", text: "深圳市移卡科技有限公司", color: "#4ea2f0" },
+          {
+            id: "N173",
+            text: "上海企鹅金融信息服务有限公司",
+            color: "#4ea2f0",
+          },
+          {
+            id: "N174",
+            text: "腾安基金销售（深圳）有限公司",
+            color: "#4ea2f0",
+          },
+          {
+            id: "N175",
+            text: "深圳微众金融科技集团股份有限公司",
+            color: "#4ea2f0",
+          },
+          { id: "N176", text: "深圳瓶子科技有限公司", color: "#4ea2f0" },
+          {
+            id: "N177",
+            text: "上海冠润创业投资合伙企业（有限合伙）",
+            color: "#4ea2f0",
+          },
+          {
+            id: "N178",
+            text: "深圳前海微众银行股份有限公司",
+            color: "#4ea2f0",
+          },
+          { id: "N179", text: "北京英克必成科技有限公司", color: "#4ea2f0" },
+          { id: "N180", text: "和泰人寿保险股份有限公司", color: "#4ea2f0" },
+          {
+            id: "N181",
+            text: "北京知道创宇信息技术股份有限公司",
+            color: "#4ea2f0",
+          },
+          { id: "N182", text: "常州哈酷那软件科技有限公司", color: "#4ea2f0" },
+          {
+            id: "N183",
+            text: "腾讯云计算（北京）有限责任公司",
+            color: "#4ea2f0",
+          },
+        ],
+        links: [
+          { from: "N2", to: "N1", text: "" },
+          { from: "N3", to: "N1", text: "" },
+          { from: "N4", to: "N1", text: "" },
+          { from: "N5", to: "N1", text: "" },
+          { from: "N1", to: "N6", text: "出资:100%" },
+          { from: "N1", to: "N7", text: "出资:100%" },
+          { from: "N1", to: "N8", text: "出资:95%" },
+          { from: "N1", to: "N9", text: "出资:37.22%" },
+          { from: "N1", to: "N10", text: "出资:0%" },
+          { from: "N1", to: "N11", text: "出资:100%" },
+          { from: "N11", to: "N12", text: "出资:51%" },
+          { from: "N11", to: "N13", text: "出资:30%" },
+          { from: "N11", to: "N14", text: "出资:57.8%" },
+          { from: "N1", to: "N15", text: "出资:95%" },
+          { from: "N15", to: "N16", text: "出资:100%" },
+          { from: "N15", to: "N17", text: "出资:10%" },
+          { from: "N15", to: "N18", text: "出资:100%" },
+          { from: "N15", to: "N19", text: "出资:100%" },
+          { from: "N1", to: "N20", text: "出资:51%" },
+          { from: "N20", to: "N21", text: "出资:44%" },
+          { from: "N1", to: "N22", text: "出资:20.23%" },
+          { from: "N1", to: "N23", text: "出资:19.12%" },
+          { from: "N1", to: "N24", text: "出资:0%" },
+          { from: "N1", to: "N25", text: "出资:14.68%" },
+          { from: "N1", to: "N26", text: "出资:100%" },
+          { from: "N1", to: "N27", text: "出资:16.03%" },
+          { from: "N1", to: "N28", text: "出资:19.9%" },
+          { from: "N1", to: "N29", text: "出资:0%" },
+          { from: "N1", to: "N30", text: "出资:90%" },
+          { from: "N1", to: "N31", text: "出资:29%" },
+          { from: "N31", to: "N32", text: "出资:0.31%" },
+          { from: "N1", to: "N33", text: "出资:95%" },
+          { from: "N33", to: "N34", text: "出资:15%" },
+          { from: "N33", to: "N35", text: "出资:9.61%" },
+          { from: "N1", to: "N36", text: "出资:45%" },
+          { from: "N1", to: "N37", text: "出资:22.82%" },
+          { from: "N1", to: "N120", text: "出资:95%" },
+          { from: "N120", to: "N121", text: "出资:100%" },
+          { from: "N120", to: "N122", text: "出资:99%" },
+          { from: "N120", to: "N123", text: "出资:0%" },
+          { from: "N120", to: "N124", text: "出资:0%" },
+          { from: "N120", to: "N125", text: "出资:44.44%" },
+          { from: "N1", to: "N126", text: "出资:39.05%" },
+          { from: "N1", to: "N127", text: "出资:51%" },
+          { from: "N1", to: "N128", text: "出资:95%" },
+          { from: "N1", to: "N129", text: "出资:50%" },
+          { from: "N1", to: "N130", text: "出资:95%" },
+          { from: "N130", to: "N131", text: "出资:0%" },
+          { from: "N1", to: "N132", text: "出资:51%" },
+          { from: "N132", to: "N133", text: "出资:100%" },
+          { from: "N132", to: "N134", text: "出资:38%" },
+          { from: "N132", to: "N135", text: "出资:15%" },
+          { from: "N132", to: "N136", text: "出资:0%" },
+          { from: "N132", to: "N137", text: "出资:20%" },
+          { from: "N132", to: "N138", text: "出资:0%" },
+          { from: "N132", to: "N139", text: "出资:100%" },
+          { from: "N1", to: "N140", text: "出资:99%" },
+          { from: "N1", to: "N141", text: "出资:95%" },
+          { from: "N141", to: "N142", text: "出资:100%" },
+          { from: "N1", to: "N143", text: "出资:0%" },
+          { from: "N1", to: "N144", text: "出资:8%" },
+          { from: "N1", to: "N145", text: "出资:100%" },
+          { from: "N145", to: "N146", text: "出资:100%" },
+          { from: "N145", to: "N147", text: "出资:100%" },
+          { from: "N1", to: "N148", text: "出资:100%" },
+          { from: "N1", to: "N149", text: "出资:0%" },
+          { from: "N1", to: "N150", text: "出资:12.69%" },
+          { from: "N150", to: "N151", text: "出资:100%" },
+          { from: "N1", to: "N152", text: "出资:51%" },
+          { from: "N152", to: "N153", text: "出资:2.01%" },
+          { from: "N1", to: "N154", text: "出资:39%" },
+          { from: "N1", to: "N155", text: "出资:10.21%" },
+          { from: "N1", to: "N156", text: "出资:100%" },
+          { from: "N156", to: "N157", text: "出资:45%" },
+          { from: "N1", to: "N158", text: "出资:100%" },
+          { from: "N1", to: "N159", text: "出资:10.06%" },
+          { from: "N1", to: "N160", text: "出资:1.52%" },
+          { from: "N1", to: "N161", text: "出资:51%" },
+          { from: "N161", to: "N162", text: "出资:0%" },
+          { from: "N161", to: "N163", text: "出资:100%" },
+          { from: "N1", to: "N164", text: "出资:51%" },
+          { from: "N164", to: "N165", text: "出资:5%" },
+          { from: "N1", to: "N166", text: "出资:7.88%" },
+          { from: "N1", to: "N167", text: "出资:47.53%" },
+          { from: "N1", to: "N168", text: "出资:9%" },
+          { from: "N1", to: "N169", text: "出资:51.72%" },
+          { from: "N1", to: "N170", text: "出资:29%" },
+          { from: "N170", to: "N171", text: "出资:3.89%" },
+          { from: "N170", to: "N172", text: "出资:3.83%" },
+          { from: "N170", to: "N173", text: "出资:100%" },
+          { from: "N170", to: "N174", text: "出资:100%" },
+          { from: "N170", to: "N175", text: "出资:0%" },
+          { from: "N170", to: "N176", text: "出资:100%" },
+          { from: "N170", to: "N177", text: "出资:0%" },
+          { from: "N170", to: "N178", text: "出资:21.43%" },
+          { from: "N1", to: "N179", text: "出资:100%" },
+          { from: "N179", to: "N180", text: "出资:15%" },
+          { from: "N179", to: "N181", text: "出资:10.5%" },
+          { from: "N179", to: "N182", text: "出资:24.84%" },
+          { from: "N179", to: "N183", text: "出资:20%" },
+        ],
+      };
+      console.log(JSON.stringify(__graph_json_data));
+      __graph_json_data.nodes.forEach((thisNode) => {
+        if (thisNode.text === "深圳市腾讯计算机系统有限公司") {
+          thisNode.width = 300;
+          thisNode.height = 100;
+          thisNode.offset_x = -80;
         }
-      }
-      for (var i = 0; i < right.children.length; i++) {
-        if (right.children[i].children.length > 2) {
-          mynodes = right.children[i].children;
-          right.children[i].children = right.children[i].children.slice(0, 2);
-          right.children[i].children[2] = {
-            name: "更多",
-            type: -1,
-            val: mynodes.length - 2,
-            childrend: mynodes.slice(0, mynodes.length),
-          };
+        if (
+          thisNode.text === "张志东" ||
+          thisNode.text === "陈一丹" ||
+          thisNode.text === "许晨晔" ||
+          thisNode.text === "马化腾"
+        ) {
+          thisNode.width = 100;
+          thisNode.height = 80;
+          thisNode.offset_y = 80;
         }
-      }
-      // console.log(data, "初始化");
-      this.treeInit(data);
-      //     }
-      // })
-    },
-    uuid() {
-      function s4() {
-        return Math.floor((1 + Math.random()) * 0x10000)
-          .toString(16)
-          .substring(1);
-      }
-      return (
-        s4() +
-        s4() +
-        "-" +
-        s4() +
-        "-" +
-        s4() +
-        "-" +
-        s4() +
-        "-" +
-        s4() +
-        s4() +
-        s4()
+        // 为节点《这个节点原本是没有子节点的》设置属性expandHolderPosition，使其在没有子节点的情况下也能显示【展开/收缩】按钮，当点击展开时动态加载子节点数据
+        if (thisNode.text === "这个节点原本是没有子节点的") {
+          thisNode.data = { asyncChild: true, loaded: false }; // 这是一个自定义属性，用来在后续判断如果点击了这个节点，则动态获取数据
+          thisNode.expandHolderPosition = "bottom";
+          thisNode.expanded = false;
+        }
+      });
+      setTimeout(
+        function () {
+          this.g_loading = false;
+          this.$refs.seeksRelationGraph.setJsonData(
+            __graph_json_data,
+            (seeksRGGraph) => {
+              // 这些写上当图谱初始化完成后需要执行的代码
+            }
+          );
+        }.bind(this),
+        1000
       );
     },
-    //初始化
-    treeInit(data) {
-      const margin = { top: 0, right: 0, bottom: 0, left: 0 };
-      let treeWidth = d3.select("#treeRoot")._parents[0].clientWidth;
-      let treeHeight = d3.select("#treeRoot")._parents[0].clientHeight;
-      // const treeWidth = document.body.clientWidth - margin.left - margin.right; //tree容器宽
-      // const treeHeight = document.body.clientHeight - margin.top - margin.bottom; //tree容器高
-      const centralY = treeWidth / 2 + margin.left;
-      const centralX = treeHeight / 2 + margin.top;
-      this.centralPoint = [centralX, centralY]; //中心点坐标
-
-      //根节点字符所占宽度
-      this.rootNodeLength = this.rootName[0].length * this.fontSize + 50;
-
-      //svg标签
-      svg = d3
-        .select("#treeRoot")
-        .append("svg")
-        .attr("class", "tree-svg")
-        .attr("xmlns", "http://www.w3.org/2000/svg")
-        .attr("width", treeWidth)
-        .attr("height", treeHeight)
-        .attr("font-size", this.fontSize)
-        .attr("fill", "#555");
-
-      //g标签
-      this.container = svg
-        .append("g")
-        .attr("class", "container1")
-        .attr(
-          "transform",
-          "translate(" + margin1.left + "," + margin1.top + ")scale(0.8)"
-        );
-
-      //画出根节点
-      this.drawRoot();
-      //指定缩放范围
-      const zoom = d3
-        .zoom()
-        .scaleExtent(this.scaleRange)
-        .on("zoom", this.zoomFn);
-      //动画持续时间
-      this.container
-        .transition()
-        .duration(this.duration)
-        .call(zoom.transform, d3.zoomIdentity);
-      svg.call(zoom);
-      //数据处理
-      // console.log(data, "数据处理");
-      this.dealData(data);
-      // let domNode1 = document.querySelectorAll('.rgNode')
-      // let domNode2 = document.querySelectorAll('.lgNode')
-      // var menuBox = document.querySelector("#menuBox");
-      // domNode1.forEach(item=>{
-      //   item.addEventListener('contextmenu',(e) => {
-      //     e = e || window.event;
-      //   // 阻止浏览器的默认行为
-      //   if ( e && e.preventDefault ) {
-      //       e.preventDefault();//防止浏览器默认行为(W3C) 
-      //   } else {
-      //      window.event.returnValue = false;//IE中阻止浏览器行为 
-      //   }
-      //   console.log(menuBox)
-      //     menuBox.style.display = "inline-block";
-      //     menuBox.style.position = "absolute";
-      //     console.log(e.clientX,e.clientY)
-      //     menuBox.style.left = e.clientX + "px";
-      //     menuBox.style.top = e.clientY + "px";
-      //   })
-      // })
-    },
-
-    zoomFn() {
-      var weizhi = document.getElementsByClassName("container1")[0];
-      weizhi.style.transform = ""; //偏移位置
-      let zoom = d3.event.transform;
-      return this.container.attr(
-        "transform",
-        "translate(" +
-          (Number(zoom.x) + Number(margin1.left)) +
-          "," +
-          (zoom.y + margin1.top) +
-          ")scale(" +
-          zoom.k * 0.8 +
-          ")"
-      );
-    },
-    //数据重组
-    DataReor(d, direction, source, appendData) {
-      var setDepth = function (node, num, appendLeaf) {
-        //重新设置depth
-        node.depth = num;
-        if (node.children && node.children.length) {
-          //遍历children
-          node.children.forEach(function (item) {
-            setDepth(item, num + 1, appendLeaf);
-          });
-        } else {
-          appendLeaf.push(node);
-        }
-      };
-
-      var setHeight = function (arr, num) {
-        //重新设置height
-        var parent = [];
-        arr.forEach(function (node) {
-          node.height = Math.max(num, node.height);
-          if (node.parent && parent.indexOf(node.parent) == -1) {
-            parent.push(node.parent);
-          }
-        });
-
-        if (parent.length) {
-          setHeight(parent, num + 1);
-        }
-      };
-
-      var appendLeaf = []; //增加的叶子节点
-
-      if (appendData.children.length) {
-        d.children = [];
-        appendData.children.forEach(function (item, index) {
-          var newNode = d3.hierarchy(item);
-          newNode.parent = d;
-          newNode.height = -1;
-          setDepth(newNode, d.depth + 1, appendLeaf);
-          d.children.push(newNode);
-        });
-      }
-
-      if (appendLeaf.length) {
-        setHeight(appendLeaf, 0);
-      }
-
-      if (source.data.name == "更多") {
-        source.parent.descendants().forEach((d) => {
-          d._children = d.children;
-          d.id = direction + this.uuid();
-        });
-      } else {
-        source.descendants().forEach((d) => {
-          d._children = d.children;
-          d.id = direction + this.uuid();
-        });
-      }
-      this.update(d, direction);
-    },
-    getNode(d, direction, source, type) {
-      let mynodes;
-      // 注释ly---start
-      // if (!d.data.isNextNode && d.data.type != -1) {
-      //   return;
-      // }
-      // 注释ly---end
-      // console.log("重组数据");
-      if (d.data.name == "更多") {
-        var num = d.data.val / 5;
-        if (num <= 5) {
-          var arr = d.data.childrend;
-        } else {
-          var arr = d.data.childrend.slice(0, d.parent.children.length + 4);
-          arr[d.parent.children.length + 4] = {
-            nodeName: "更多",
-            type: -1,
-            val: d.data.childrend.length - d.parent.children.length + 4,
-            childrend: d.data.childrend,
-          };
-        }
-        var appendData = {
-          children: arr,
-        };
-        this.DataReor(d.parent, direction, source, appendData);
-      } else if (type == 1) {
-        var appendData = {
-          children: [],
-        };
-        this.DataReor(d, direction, source, appendData);
-      } else {
-        //请求数据
-        // console.log(d.data, "请求数据参数 update");
-        $("#loading,.shaow").show();
-        let data = [];
-        $("#loading,.shaow").hide();
-        if (data.length == 0) {
-          html =
-            '<div class="tk"><p style="font-size: 14px;color: #359ffb">' +
-            d.data.name +
-            "</p><span>暂无数据</span></div>";
-          $(".shaow").show();
-          $("body").append(html);
-          return;
-        }
-        mynodes = data;
-        if (data.length > 10) {
-          data = data.slice(0, 10);
-          data[11] = {
-            name: "更多",
-            type: -1,
-            val: mynodes.length - 10,
-            childrend: mynodes.slice(0, mynodes.length),
-          };
-        }
-        var appendData = {
-          children: data,
-        };
-        this.DataReor(d, direction, source, appendData);
-      }
-    },
-    //数据处理
-    dealData(data) {
-      this.direction.forEach((item) => {
-        this.root[item] = d3.hierarchy(data[item]);
-        this.root[item].x0 = this.centralPoint[0]; //根节点x坐标
-        this.root[item].y0 = this.centralPoint[1]; //根节点Y坐标
-        this.porData(this.root[item], item);
-      });
-    },
-    //遍历
-    porData(obj, item) {
-      obj.descendants().forEach((d) => {
-        d._children = d.children;
-        d.id = item + this.uuid();
-      });
-      this.update(obj, item);
-    },
-    //画根节点
-    drawRoot() {
-      const title = this.container
-        .append("g")
-        .attr("id", "rootTitle")
-        .attr(
-          "transform",
-          `translate(${this.centralPoint[1]},${this.centralPoint[0]})`
-        );
-      title
-        .append("svg:rect")
-        .attr("class", "rootTitle")
-        .attr("y", 0)
-        .attr("x", -this.rootNodeLength / 2)
-        .attr("width", this.rootNodeLength)
-        .attr("height", 0)
-        .attr("rx", 5) //圆角
-        .style("fill", this.themeColor);
-      this.rootName.forEach((name, index) => {
-        title
-          .append("text")
-          .attr("fill", "white")
-          .attr("y", function () {
-            return 5;
-          })
-          .attr("text-anchor", "middle")
-          .style("font-size", function () {
-            if (index == 1) {
-              return "10px";
-            } else {
-              return "15px";
-            }
-          })
-          .text(name);
-
-        let lineHeight = (index + 2) * this.textSpace;
-        d3.select("#rootTitle rect")
-          .attr("height", lineHeight)
-          .attr("y", -lineHeight / 2);
-      });
-    },
-    seat(newArr, dirRight, data) {
-      for (var j = 0; j < newArr.length; j++) {
-        if (j != 0) {
-          for (var i = 0; i < data[j].length; i++) {
-            data[j][i].y = data[j - 1][0].y + newArr[j - 1] - 40;
-          }
-        }
-      }
-    },
-    testLength(data, dirRight) {
-      var level = [],
-        width1,
-        width2;
-
-      for (var i = 0; i < data.length; i++) {
-        var newArr = new Array();
-
-        for (var j = 0; j < data[i].length; j++) {
-          if (data[i][j].data.attName) {
-            svg
-              .append("text")
-              .style("font-size", this.fontSize)
-              .text((d) => "(" + data[i][j].data.attName + ")")
-              .attr("class", "test")
-              .attr("width", function (d) {
-                width3 = d3.select(this.getComputedTextLength())._groups[0][0];
-                console.log(width3,"width3");
-              });
-          }
-          if (data[i][j].data.ratio) {
-            svg
-              .append("text")
-              .style("font-size", this.fontSize)
-              .text(function (d) {
-                const len = data[i][j].data.name.length;
-                if (len > 20) {
-                  return data[i][j].data.name.substring(0, 20) + "...";
-                } else {
-                  return data[i][j].data.name;
-                }
-              })
-              .attr("class", "test")
-              .attr("width", function (d) {
-                width1 = d3.select(this.getComputedTextLength())._groups[0][0];
-              });
-            svg
-              .append("text")
-              .style("font-size", this.fontSize)
-              .text((d) => data[i][j].data.ratio)
-              .attr("class", "test")
-              .attr("width", function (d) {
-                width2 = d3.select(this.getComputedTextLength())._groups[0][0];
-              });
-
-            $(".test").remove();
-            if (data[i][j].data.attName) {
-              if (Number(width1) + Number(width3) > Number(width2)) {
-                newArr.push(Number(width1) + Number(width3) + 100);
-              } else {
-                newArr.push(Number(width2) + 100);
+    onNodeExpand(node, e) {
+      //模拟动态加载数据
+      if (
+        node.data &&
+        node.data.asyncChild === true &&
+        node.data.loaded === false
+      ) {
+        this.g_loading = true;
+        node.data.loaded = true;
+        setTimeout(
+          function () {
+            this.g_loading = false;
+            var _new_json_data = {
+              nodes: [
+                { id: node.id + "-child-1", text: node.id + "-的子节点1" },
+                { id: node.id + "-child-2", text: node.id + "-的子节点2" },
+                { id: node.id + "-child-3", text: node.id + "-的子节点3" },
+              ],
+              links: [
+                { from: node.id, to: node.id + "-child-1", text: "动态子节点" },
+                { from: node.id, to: node.id + "-child-2", text: "动态子节点" },
+                { from: node.id, to: node.id + "-child-3", text: "动态子节点" },
+              ],
+            };
+            this.$refs.seeksRelationGraph.appendJsonData(
+              _new_json_data,
+              (seeksRGGraph) => {
+                // 这些写上当图谱初始化完成后需要执行的代码
               }
-            } else {
-              if (Number(width1) > Number(width2)) {
-                newArr.push(Number(width1) + 100);
-              } else {
-                newArr.push(Number(width2) + 100);
-              }
-            }
-          } else {
-            svg
-              .append("text")
-              .style("font-size", this.fontSize)
-              .text(function (d) {
-                if (data[i][j].data.name) {
-                  const len = data[i][j].data.name.length;
-                  if (len > 20) {
-                    return data[i][j].data.name.substring(0, 20) + "...";
-                  } else {
-                    return data[i][j].data.name;
-                  }
-                }
-              })
-              .attr("class", "test")
-              .attr("width", function (d) {
-                width1 = d3.select(this.getComputedTextLength())._groups[0];
-
-                newArr.push(Number(width1) + 100);
-                data.width1 = d3.select(
-                  this.getComputedTextLength()
-                )._groups[0];
-              });
-            $(".test").remove();
-          }
-        }
-        level.push(Math.max.apply(null, newArr));
-      }
-
-      this.seat(level, dirRight, data);
-    },
-
-    //开始绘图
-    update(source, direction) {
-      // console.log(source, direction, "update");
-      let that = this;
-      dirRight = direction === "r" ? 1 : -1; //方向为右/左
-      forUpward = direction == "r";
-      let className = `${direction}gNode`;
-      let tree = this.treeMap(this.root[direction]);
-      let nodes = tree.descendants();
-      let links = tree.links();
-      var data = [];
-      if (nodes.length > 1) {
-        for (var i = 0; i < nodes.length; i++) {
-          if (!data[nodes[i].depth]) {
-            var arr = [];
-            arr.push(nodes[i]);
-            data[nodes[i].depth] = arr;
-          } else {
-            data[nodes[i].depth].push(nodes[i]);
-          }
-        }
-        //检测最大长度
-        this.testLength(data, dirRight);
-      }
-      nodes.forEach((d) => {
-        d.y = dirRight * (d.y + this.rootNodeLength / 2) + this.centralPoint[1];
-        d.x = d.x + this.centralPoint[0];
-      });
-
-      //根据class名称获取左或者右的g节点，达到分块更新
-      const node = this.container
-        .selectAll(`g.${className}`)
-        .data(nodes, (d) => d.id);
-      //新增节点，tree会根据数据内的children扩展相关节点
-      const nodeEnter = node
-        .enter()
-        .append("g")
-        .attr("id", (d) => `g${d.id}`)
-        .attr("class", className)
-        .attr("transform", (d) => `translate(${source.y0},${source.x0})`)
-        .attr("fill-opacity", 0)
-        .attr("stroke-opacity", 0)
-        .on("click", function (d) {
-          d3.select(this)
-            .selectAll(".node-circle .node-circle-vertical")
-            .transition()
-            .duration(that.duration)
-            .attr("stroke-width", function (d) {
-              if (d.children) {
-                return 1;
-              } else {
-                return 0;
-              }
-            });
-
-          if (d.data.name == "更多") {
-            return that.clickNode(d, direction, source);
-          } else if (d.depth !== 0) {
-            return that.clickNode(d, direction, source);
-          }
-        });
-      nodeEnter.each((d) => {
-        if (d.depth > 0) {
-          this.drawText(`g${d.id}`, dirRight);
-          if (d.data.attName) {
-            this.drawCodeText(`g${d.id}`, dirRight);
-          }
-          if (d.data.ratio) {
-            this.drawTsText(`g${d.id}`, dirRight);
-          }
-
-          this.drawRect(`g${d.id}`, dirRight);
-          this.marker(`g${d.id}`, dirRight);
-        }
-
-        if (d.depth > 0) {
-          const width = Math.min(d.data.name.length * 14, this.rectMinWidth);
-          let right = dirRight > 0;
-          let xDistance = right ? width : -width;
-          this.drawCircle(`g${d.id}`, dirRight, source, direction);
-          this.drawSign(`g${d.id}`, dirRight); //画标记
-        }
-
-        //画节点数量
-        // console.log(d, "画节点数量");
-        if (d.data && d.data.type == -1) {
-          this.drawLength(`g${d.id}`, dirRight);
-        }
-      });
-
-      // 更新节点：节点enter和exit时都会触发tree更新
-      const nodeUpdate = node
-        .merge(nodeEnter)
-        .transition()
-        .duration(this.duration)
-        .attr("transform", function (d) {
-          if (d.data && d.data.isNextNode) {
-            d3.select(this)
-              .selectAll(".node-circle .node-circle-vertical")
-              .transition()
-              .duration(this.duration)
-              .attr("stroke-width", function (d) {
-                if (d.children) {
-                  return 0;
-                } else {
-                  return 1;
-                }
-              });
-          }
-
-          var index = 0;
-
-          return "translate(" + d.y + "," + d.x + ")";
-        })
-        .attr("fill-opacity", 1)
-        .attr("stroke-opacity", 1);
-
-      // 移除节点:tree移除掉数据内不包含的节点(即，children = false)
-      const nodeExit = node
-        .exit()
-        .transition()
-        .duration(this.duration)
-        .remove()
-        .attr("transform", (d) => `translate(${source.y},${source.x})`)
-        .attr("fill-opacity", 0)
-        .attr("stroke-opacity", 0);
-
-      // Update the links 根据 className来实现分块更新
-      const link = this.container
-        .selectAll(`path.${className}`)
-        .data(links, (d) => d.target.id);
-
-      // Enter any new links at the parent's previous position.
-      //insert是在g标签前面插入，防止连接线挡住G节点内容
-      const linkEnter = link
-        .enter()
-        .insert("path", "g")
-        .attr("class", className)
-        .attr("d", (d) => {
-          const o = { x: source.x0, y: source.y0 };
-
-          return this.diagonal({ source: o, target: o });
-        })
-        .attr("fill", "none")
-        .attr("stroke-width", 0.5)
-        .attr("stroke", "#D8D8D8");
-
-      // Transition links to their new position.
-      link
-        .merge(linkEnter)
-        .transition()
-        .duration(this.duration)
-        .attr("d", this.diagonal);
-
-      // Transition exiting nodes to the parent's new position.
-      link
-        .exit()
-        .transition()
-        .duration(this.duration)
-        .remove()
-        .attr("d", (d) => {
-          const o = { x: source.x, y: source.y };
-
-          return this.diagonal({ source: o, target: o });
-        });
-
-      // Stash the old positions for transition.
-      this.root[direction].eachBefore((d) => {
-        d.x0 = d.x;
-        d.y0 = d.y;
-      });
-    },
-    //画连接线
-    diagonal({ source, target }) {
-      let s = source,
-        d = target;
-
-      if (forUpward) {
-        return (
-          "M" +
-          s.y +
-          "," +
-          s.x +
-          "L" +
-          (s.y + (d.y - s.y) - 20) +
-          "," +
-          s.x +
-          "L" +
-          (s.y + (d.y - s.y) - 20) +
-          "," +
-          d.x +
-          "L" +
-          d.y +
-          "," +
-          d.x
+            );
+          }.bind(this),
+          1000
         );
-      } else {
-        return (
-          "M" +
-          s.y +
-          "," +
-          s.x +
-          "L" +
-          (s.y + (d.y - s.y) + 20) +
-          "," +
-          s.x +
-          "L" +
-          (s.y + (d.y - s.y) + 20) +
-          "," +
-          d.x +
-          "L" +
-          d.y +
-          "," +
-          d.x
-        );
-      }
-    },
-
-    //画箭头
-    marker(id, dirRight) {
-      let gMark = d3
-        .select(`#${id}`)
-        .append("g")
-        .attr(
-          "transform",
-          dirRight > 0 ? "translate(-20,0)" : "translate(12,0)"
-        );
-      return gMark
-        .insert("path", "text")
-
-        .attr("d", function (d) {
-          if (d.data.nodeType == 0 && dirRight > 0) {
-            return "M0,0L0,3L9,0L0,-3Z";
-          } else if (d.data.nodeType == 0 && dirRight < 0) {
-            return "M0,0L9,-3L9,3Z";
-          }
-        })
-        .style("fill", (d) => this.getRectStorke(d.data.name));
-    },
-
-    //华标记
-    drawSign(id, dirRight) {
-      return d3
-        .select(`#${id}`)
-        .insert("circle", "text")
-        .attr("cx", dirRight > 0 ? -5 : 5)
-        .attr("y", -2.5)
-        .attr("r", function (d) {
-          if (d.data.nodeType == 0) {
-            return 4;
-          }
-        })
-        .style("fill", (d) => this.getRectStorke(d.data.name));
-    },
-    //画文本
-    drawText(id, dirRight) {
-      let that = this;
-      dirRight = dirRight > 0; //右为1，左为-1
-      return d3
-        .select(`#${id}`)
-        .append("text")
-        .attr("y", function (d) {
-          if (d.data.ratio) {
-            return that.textPadding - 8;
-          } else {
-            return that.textPadding;
-          }
-        })
-        .attr("x", (d) => (dirRight ? that.textPadding : -that.textPadding))
-        .attr("text-anchor", dirRight ? "start" : "end")
-        .style("font-size", that.fontSize)
-        .text(function (d) {
-          const len = d.data.name.length;
-          if (len > 20) {
-            return d.data.name.substring(0, 20) + "...";
-          } else {
-            return d.data.name;
-          }
-        })
-        .attr("fill", function (d) {
-          if (d.data.nodeType == -1) {
-            return "rgb(33, 150, 243)";
-          } else if (d.data.nodeType == 0 || d.data.attName) {
-            return "#000";
-          } else {
-            return "#333";
-          }
-        })
-
-        .attr("width", function (d) {
-          circlewidth1 = d3.select(this.getComputedTextLength())._groups[0][0];
-          return d3.select(this.getComputedTextLength())._groups[0][0];
-        });
-    },
-    //画子文本
-    drawTsText(id, dirRight) {
-
-      let that = this;
-      return d3
-        .select(`#${id} text`)
-        .append("tspan")
-        .attr("fill", (d) => (d.data.attName ? "#fff" : "#999"))
-        .attr("y", function (d) {
-          if (d.data.ratio) {
-            return that.textPadding + 8;
-          }
-        })
-        .attr("x", function (d) {
-          if (dirRight > 0) {
-            return that.textPadding;
-          } else {
-            return -5;
-          }
-        })
-        .style("font-size", "11px")
-        .text(function (d) {
-          return d.data.ratio;
-        })
-
-        .attr("width", function (d) {
-          circlewidth2 = d3.select(this.getComputedTextLength())._groups[0][0];
-          return d3.select(this.getComputedTextLength())._groups[0][0];
-        });
-    },
-    //画股票代码
-    drawCodeText(id, dirRight) {
-
-      return d3
-        .select(`#${id} text`)
-        .append("tspan")
-        .attr("fill", (d) => "#fff")
-        .attr("y", function (d) {
-          if (d.data.ratio) {
-            return this.textPadding + 8;
-          }
-        })
-        .style("font-size", "11px")
-        .attr("x", function (d) {
-          if (dirRight > 0) {
-            return this.textPadding;
-          } else {
-            return -5;
-          }
-        })
-        .text(function (d) {
-          return d.data.attName + " ";
-        })
-
-        .attr("width", function (d) {
-          circlewidth3 = d3.select(this.getComputedTextLength())._groups[0][0];
-          return d3.select(this.getComputedTextLength())._groups[0][0];
-        });
-    },
-    //节点数量
-    drawLength(id) {
-
-      return d3
-        .select(`#${id} text`)
-        .append("tspan")
-        .attr("fill", (d) => "#999")
-        .text(function (d) {
-          if (d.data.type == -1) {
-            return " (" + d.data.val + ")";
-          }
-          return " [" + d.data.ratio + "]";
-        })
-        .attr("fill", "rgb(33, 150, 243)")
-        .attr("width", function (d) {
-          return d3.select(this.getComputedTextLength())._groups[0];
-        });
-    },
-    //画方框阴影
-    drawFilter(id) {
-
-      return d3
-        .select(`#${id}`)
-        .insert("defs", "rect")
-        .append("filter")
-        .attr("id", `f${id}`)
-        .attr("x", 0)
-        .attr("y", 0)
-        .append("feGaussianBlur")
-        .attr("in", "SourceGraphic")
-        .attr("stdDeviation", "5");
-    },
-
-    //画方框
-    drawRect(id, dirRight) {
-
-      let that = this;
-      let realw = document.getElementById(id).getBBox().width + 25; //获取g实际宽度后，设置rect宽度
-      if (document.getElementById(id).getBBox().width > 400) {
-        realw = 400;
-      }
-
-      return d3
-        .select(`#${id}`)
-        .insert("rect", "text")
-        .attr("x", function (d) {
-          if (dirRight < 0) {
-            return -realw;
-          } else {
-            0;
-          }
-        })
-        .attr("y", function (d) {
-          if (d.data.ratio) {
-            return -that.textSpace + that.textPadding - 11;
-          } else {
-            return -that.textSpace + that.textPadding - 4;
-          }
-        })
-        .attr("width", function (d) {
-          // if (d.data.isNextNode) {//判断是否有下级节点
-          //     return realw
-          // } else {
-          //     return realw - 15
-          // }
-          return realw;
-        })
-        .attr("height", function (d) {
-          if (d.data.ratio) {
-            return that.textSpace + that.textPadding + 22;
-          } else {
-            return that.textSpace + that.textPadding + 8;
-          }
-        })
-        .attr("stroke-width", (d) =>
-          d.data.nodeType == 0 || d.data.type == -1 || d.data.attName ? 0 : 0.5
-        )
-        .attr("rx", 2) //圆角
-
-        .style("stroke", (d) =>
-          d.data.nodeType == -1 ? "" : that.getRectStorke(d.parent.data.name)
-        )
-        .style("fill", function (d) {
-          if (d.data.nodeType == -1) {
-            return "rgb(241, 241, 241)";
-          } else if (d.data.nodeType == 0) {
-            return that.getRectStorke(d.data.name);
-          } else if (d.data.attName) {
-            return "rgb(33, 150, 243)";
-          } else {
-            return "#fff";
-          }
-        });
-    },
-
-    //画circle
-    drawCircle(id, dirRight, source, direction) {
-
-      let gMark = d3
-        .select(`#${id}`)
-        .append("g")
-        .attr("class", "node-circle")
-        .attr("stroke", "rgb(153, 153, 153)")
-        .attr("transform", function (d) {
-          if (d.data.ratio) {
-            if (circlewidth1 > circlewidth2) {
-              leng = Number(circlewidth1) + 15;
-            } else {
-              leng = Number(circlewidth2) + 15;
-            }
-
-            //leng = Number(circlewidth1) + Number(circlewidth2) + 25;
-            if (leng > 390) {
-              leng = 390;
-            }
-            if (dirRight == 1) {
-              return "translate(" + leng + ",0)";
-            } else {
-              return "translate(" + -leng + ",0)";
-            }
-          } else {
-            leng = Number(circlewidth1) + 15;
-            if (dirRight == 1) {
-              return "translate(" + leng + ",0)";
-            } else {
-              return "translate(" + -leng + ",0)";
-            }
-          }
-        })
-        // .attr('stroke-width', d => d.data.isNextNode ? 1 : 0);   判断是否有下级节点
-        .attr("stroke-width", (d) => (d.data.type == "-1" ? 0 : 1));
-
-      gMark
-        .append("circle")
-        .attr("fill", "none")
-        .attr("r", function (d) {
-          if (d.data.type == "-1") {
-            return 0;
-          }
-          return 5;
-        }) //根节点不设置圆圈
-        .attr("fill", "#ffffff");
-      let padding = this.circleR - 2;
-
-      gMark.append("path").attr("d", `m -${padding} 0 l ${2 * padding} 0`); //横线
-
-      gMark
-        .append("path") //竖线，根据展开/收缩动态控制显示
-        .attr("d", `m 0 -${padding} l 0 ${2 * padding}`)
-        .attr("stroke-width", function (d) {
-          if (d.data.type == "-1") {
-            return 0;
-          }
-          return 1;
-        })
-        .attr("class", "node-circle-vertical");
-      return gMark;
-    },
-
-    //点击某个节点
-    // clickNode(d, direction, source) {
-    //   if (d.children) {
-    //     d._children = d.children;
-    //     d.children = null;
-    //     this.getNode(d, direction, source, 1);
-    //   } else {
-    //     d.children = d._children;
-    //     d._children = [];
-    //     this.getNode(d, direction, source); //原注
-    //   }
-    //   if (d.data.name == "更多") {
-    //     this.getNode(d, direction, source);
-    //     return;
-    //   }
-    //   this.update(d, direction); //原注
-    // },
-
-    expand(d, direction, source) {
-
-      if (d.data.name == "更多") {
-        this.getNode(d, direction, source);
         return;
       }
-      if (d._children) {
-        d.children = d._children;
-
-        d._children = null;
-        this.update(d, direction);
-
-      }
-    },
-
-    collapse(d, direction, obj) {
-
-      if (d.children) {
-        d._children = d.children;
-        d.children = null;
-        console.log(d._children, "_children");
-      }
-      if (obj == 1) {
-        this.update(d, direction);
-      }
-    },
-
-    //点击某个节点ly
-     clickNode(d, direction, source) {
-       if (d.children || d.children) {
-         this.collapse(d, direction, 1);
-       } else {
-         this.expand(d, direction, source);
-       }
-     },
-    getTsTextColor(name) {
-
-      switch (name) {
-        case "股东":
-          return "darkgray";
-        case "供应商":
-          return "#FF9800";
-        case "合伙人":
-          return "green";
-        default:
-          return "black";
-      }
-    },
-    //末 节点 边框颜色
-    getRectStorke(name) {
-      switch (name) {
-        case "分支机构":
-          return "rgb(255, 234, 218)";
-        case "对外投资":
-          return "rgb(215, 236, 255)";
-        case "股东":
-          return "rgb(211, 234, 241)";
-        case "高管":
-          return "rgb(237, 227, 244)";
-        default:
-          return "rgb(133, 165, 255)";
-      }
-    },
-    isNull(val) {
-      return val ? val : "";
     },
   },
 };
 </script>
 
-
-<style lang="less" scoped>
-  .tree04 {
-  background: #fff;
-  touch-action: none;
-  padding: 0;
-  margin: 0;
-  height: 100%;
-  max-width: 100%;
-  overflow: hidden;
-  font-family: "PingFangSC-Regular", "PingFangSC-Light", "PingFang SC",
-    sans-serif, "Microsoft YaHei";
-}
-
+<!-- Add "scoped" attribute to limit CSS to this component only -->
+<style scoped>
 </style>

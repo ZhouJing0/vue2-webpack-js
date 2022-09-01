@@ -311,14 +311,14 @@ export default {
               this.selectItem.city.regionId +
               "-" +
               item.regionId,
+            id:
+              item.regionId,
           });
         } else {
           this.leftData.splice(
-            this.leftData.findIndex((el) => (el.regionId = item.regionId)),
-            1
-          );
+            this.leftData.findIndex((el) => el.id == item.regionId),1);
         }
-
+        console.log(this.leftData)
         this.leftData = _.uniqBy(this.leftData, "regionId");
         if (this.leftData.length === this.districList.length) {
           this.leftData = [];

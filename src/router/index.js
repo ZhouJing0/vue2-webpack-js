@@ -55,8 +55,8 @@ const routes = [
     component: () => import('../views/MapView.vue')
   },
   {
-    path: '/treechart',
-    name: 'treechart',
+    path: '/organization',
+    name: 'organization',
     component: () => import('../views/OrganizationChart.vue')
   },
   {
@@ -65,9 +65,9 @@ const routes = [
     component: () => import('../views/BaiduMap.vue')
   },
   {
-    path: '/chart',
-    name: 'chart',
-    component: () => import('../views/ChartView.vue')
+    path: '/mapchart',
+    name: 'mapchart',
+    component: () => import('../views/MapChartView.vue')
   },
   {
     path: '/right',

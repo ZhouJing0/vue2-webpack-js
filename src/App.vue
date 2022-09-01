@@ -6,14 +6,14 @@
       <router-link to="/my">My</router-link> |
       <router-link to="/you">You</router-link> |
       <router-link to="/tree">Tree</router-link> |
-      <router-link to="/table">Table</router-link> |
       <router-link to="/detail">Detail</router-link> |
       <router-link to="/area">Arae</router-link> |
-      <router-link to="/treechart">TreeChart</router-link> |
       <router-link to="/map">Map</router-link> |
       <router-link to="/baidu">baidu</router-link> |
-      <router-link to="/chart">Chart</router-link> |
+      <router-link to="/mapchart">MapChart</router-link> |
+      <router-link to="/organization">OrganizationChart</router-link> |
       <router-link to="/enterprise">Enterprise</router-link> |
+      <router-link to="/table">Table</router-link> |
       <router-link to="/right">RightClick</router-link> |
     </nav>
     <keep-alive include="TreeItem">

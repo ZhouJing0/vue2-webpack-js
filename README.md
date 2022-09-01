@@ -24,7 +24,7 @@ yarn lint
 See [Configuration Reference](https://cli.vuejs.org/config/).
 
 
- "@amap/amap-jsapi-loader": "^1.0.1", //高德地图(https://lbs.amap.com/api/jsapi-v2/guide/webcli/map-vue1)
+   "@amap/amap-jsapi-loader": "^1.0.1", //高德地图(https://lbs.amap.com/api/jsapi-v2/guide/webcli/map-vue1)
     "axios": "^0.27.2",  //
     "bpmn-js": "^8.8.3", //工作流
     "bpmn-js-properties-panel": "^0.46.0",
@@ -43,3 +43,5 @@ See [Configuration Reference](https://cli.vuejs.org/config/).
     "vue-context": "^6.0.0", //右键上下文菜单(https://madewith.cn/676)
     "vue-router": "^3.5.1",
     "vuex": "^3.6.2"
+
+    百度地图 JavaScript API v3.0
