@@ -1,6 +1,10 @@
 <template>
   <div>
-      You
+    You
+
+    {{ info }}
+    {{ msg }}
+    <el-button type="primary" @click="handleChange">CHANGR</el-button>
   </div>
 </template>
 
@@ -8,10 +12,22 @@
 // import AboutView from '@/views/AboutView'
 export default {
   name: "YouView",
+  props: {
+    info: {
+      type: Object,
+    },
+    msg: {
+      type: String,
+    },
+  },
   data() {
-    return {
-      
-    };
+    return {};
+  },
+  methods: {
+    handleChange() {
+      // this.msg = "changeData";
+      this.info = {};
+    },
   },
   // components:{
   //   AboutView
@@ -19,5 +35,4 @@ export default {
 };
 </script>
 
-<style lang="less" scoped>
-</style>
+<style lang="less" scoped></style>

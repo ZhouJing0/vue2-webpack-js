@@ -15,9 +15,10 @@
       <router-link to="/enterprise">Enterprise</router-link> |
       <router-link to="/table">Table</router-link> |
       <router-link to="/right">RightClick</router-link> |
+      <router-link to="/traffic">交通</router-link> |
     </nav>
     <keep-alive include="TreeItem">
-      <router-view/>
+      <router-view />
     </keep-alive>
   </div>
 </template>

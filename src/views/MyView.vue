@@ -1,8 +1,9 @@
 <template>
   <div>
-    <about-view>
-      <you-view></you-view>
-    </about-view>
+    <div style="color: red">{{ msg }}{{ data }}</div>
+    <!-- <about-view> -->
+    <you-view :msg="msg" :info="data"></you-view>
+    <!-- </about-view> -->
   </div>
 </template>
 
@@ -11,10 +12,13 @@ import AboutView from "@/views/AboutView";
 import YouView from "@/views/YouView";
 export default {
   name: "MyView",
-  
   data() {
     return {
-      
+      msg: "Hello",
+      data: {
+        name: "张三",
+        age: "20",
+      },
     };
   },
   components: {
@@ -24,5 +28,4 @@ export default {
 };
 </script>
 
-<style lang="less" scoped>
-</style>
+<style lang="less" scoped></style>

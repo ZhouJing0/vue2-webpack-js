@@ -43,7 +43,7 @@
         :reserve-selection="true"
         type="selection"
         :selectable="woptions.checkSelect"
-        style="width: 55px"
+        width="55px"
         align="center"
       />
       <!-- 序号 -->
@@ -51,7 +51,7 @@
         v-if="woptions.index"
         label="序号"
         type="index"
-        style="width: 55px"
+        width="55px"
         align="center"
       />
       <!-- 数据列 -->
