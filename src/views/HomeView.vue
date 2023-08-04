@@ -1,7 +1,5 @@
 <template>
-  <div>
-    <ef-treeselect> </ef-treeselect>
-  </div>
+  <div></div>
 </template>
 
 <script>
