@@ -20,6 +20,12 @@
       <div style="display: flex; flex-wrap: wrap">
         <template v-for="item in columns">
           <div
+            v-show="
+              item.association
+                ? model[item.association.controlKey] ==
+                  item.association.showValue
+                : true
+            "
             :key="item.name"
             :class="[
               'col-24',
@@ -540,32 +546,32 @@ export default {
   margin-bottom: 10px;
   background-color: #fff;
 }
-@for $index from 1 through 24 {
-  .col-#{$index} {
-    width: #{$index * 100/24}+ '%';
-  }
-}
-@media only screen and (max-width: 767px) {
-  @for $index from 1 through 24 {
-    .col-xs-#{$index} {
-      width: #{$index * 100/24}+ '%';
-    }
-  }
-}
-@media only screen and (min-width: 1200px) {
-  @for $index from 1 through 24 {
-    .col-lg-#{$index} {
-      width: #{$index * 100/24}+ '%';
-    }
-  }
-}
-@media (max-width: 1199px) and (min-width: 992px) {
-  @for $index from 1 through 24 {
-    .col-md-#{$index} {
-      width: #{$index * 100/24}+ '%';
-    }
-  }
-}
+// @for $index from 1 through 24 {
+//   .col-#{$index} {
+//     width: #{$index * 100/24}+ '%';
+//   }
+// }
+// @media only screen and (max-width: 767px) {
+//   @for $index from 1 through 24 {
+//     .col-xs-#{$index} {
+//       width: #{$index * 100/24}+ '%';
+//     }
+//   }
+// }
+// @media only screen and (min-width: 1200px) {
+//   @for $index from 1 through 24 {
+//     .col-lg-#{$index} {
+//       width: #{$index * 100/24}+ '%';
+//     }
+//   }
+// }
+// @media (max-width: 1199px) and (min-width: 992px) {
+//   @for $index from 1 through 24 {
+//     .col-md-#{$index} {
+//       width: #{$index * 100/24}+ '%';
+//     }
+//   }
+// }
 .clearfix {
   margin: 0 0px 10px;
   line-height: 40px;

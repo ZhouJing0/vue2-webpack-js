@@ -280,8 +280,18 @@ export default {
     padding: 30px 0;
     text-align: center;
   }
-  #table {
+  #wTable {
     width: 100%;
+    td {
+      .cell {
+        display: -webkit-box;
+        text-overflow: ellipsis;
+        overflow: hidden;
+        -webkit-line-clamp: 3;
+        -webkit-box-orient: vertical;
+        white-space: pre-line;
+      }
+    }
   }
 }
 </style>

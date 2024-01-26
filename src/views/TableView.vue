@@ -1,5 +1,6 @@
 <template>
   <div style="text-align: center">
+    <NumberInput></NumberInput>
     <el-table
       :summary-method="getSummaries"
       show-summary
@@ -75,17 +76,55 @@
         </template>
       </el-table-column>
     </el-table>
-    <public-table
+    <!-- <public-table
       :tools="tools"
       :data="data"
       :isPagination="false"
       :columns="columns"
       :options="options"
-    ></public-table>
+    ></public-table> -->
+    <el-table :data="data" style="width: 100%">
+      <el-table-column prop="date" label="时间" width="width">
+      </el-table-column>
+      <el-table-column prop="name" label="姓名" width="width">
+        <template slot-scope="scope">
+          <!-- tips悬浮提示 -->
+          <el-tooltip
+            placement="top"
+            v-model="scope.row.showTooltip"
+            :open-delay="500"
+            effect="dark"
+            :disabled="!scope.row.showTooltip"
+          >
+            <div slot="content">{{ scope.row.name }}</div>
+            <div @mouseenter="showTips($event, scope.row, 'name')" class="hide">
+              {{ scope.row.name }}
+            </div>
+          </el-tooltip>
+        </template>
+      </el-table-column>
+      <el-table-column prop="address" label="地址" width="width">
+        <template slot-scope="scope">
+          <div class="hide">
+            <!-- {{ scope.row.address }} -->
+            <el-tooltip
+              effect="dark"
+              :content="scope.row.address"
+              placement="top"
+            >
+              <span>{{ scope.row.address }}</span>
+            </el-tooltip>
+          </div>
+        </template>
+      </el-table-column>
+    </el-table>
   </div>
 </template>
 
 <script>
+// import NumberInput from "@/components/system/NumberInput";
+// import { NumberInput } from "my-app";
+import app from "my-app";
 export default {
   name: "TableView",
   data() {
@@ -380,8 +419,9 @@ export default {
       data: [
         {
           date: "2016-05-02",
-          name: "王小虎",
-          address: "上海市普陀区金沙江路 1518 弄",
+          name: "王小虎王小虎王小虎王小虎王小虎王小虎王小虎王小虎王小虎王小虎王小虎王小虎王小虎王小虎王小虎王小虎王小虎王小虎王小虎王小虎王小虎王小虎王小虎王小虎王小虎王小虎王小虎王小虎王小虎王小虎王小虎王小虎王小虎王小虎王小虎王小虎王小虎王小虎",
+          address:
+            "上海市普陀区金沙江路 1518 弄上海市普陀区金沙江路 1518 弄上海市普陀区金沙江路 1518 弄上海市普陀区金沙江路 1518 弄上海市普陀区金沙江路 1518 弄上海市普陀区金沙江路 1518 弄上海市普陀区金沙江路 1518 弄上海市普陀区金沙江路 1518 弄",
         },
         {
           date: "2016-05-04",
@@ -402,7 +442,7 @@ export default {
       columns: [
         { label: "姓名", prop: "name", align: "center" },
         { label: "日期", prop: "date", align: "center" },
-        { label: "地址", prop: "address", align: "center" },
+        { label: "地址", prop: "address", align: "center", tooltip: true },
       ],
       tools: [
         {
@@ -415,10 +455,32 @@ export default {
       ],
     };
   },
+  components: {
+    NumberInput: app.NumberInput,
+  },
   filters: {
     getTotal() {},
   },
   methods: {
+    showTips(obj, row, prop) {
+      /*obj为鼠标移入时的事件对象*/
+
+      /*currentWidth 为文本在页面中所占的宽度，创建标签，加入到页面，获取currentWidth ,最后在移除*/
+      let TemporaryTag = document.createElement("span");
+      TemporaryTag.innerText = row[prop];
+      TemporaryTag.className = "getTextWidth";
+      document.querySelector("body").appendChild(TemporaryTag);
+      let currentWidth = document.querySelector(".getTextWidth").offsetWidth;
+      document.querySelector(".getTextWidth").remove();
+
+      /*cellWidth为表格容器的宽度*/
+      const cellWidth = obj.target.offsetWidth;
+
+      /*当文本宽度小于||等于容器宽度两倍时，代表文本显示未超过两行*/
+      currentWidth <= 3 * cellWidth
+        ? (row.showTooltip = false)
+        : (row.showTooltip = true);
+    },
     getSum(tree, idx, sums, index) {
       if (tree && tree.length > 0) {
         tree.map((item) => {
@@ -458,17 +520,35 @@ export default {
       return sums;
     },
   },
+  created() {
+    // console.log(NumberInput, "NumberInput");
+    // console.log(myApp, "myApp");
+  },
 };
 </script>
 
 <style lang="less" scoped>
-table {
-  table-layout: fixed;
-  border-collapse: collapse;
-  td {
-    display: table-cell;
-    height: 36px;
-    border: 1px solid #e1e2e3;
+// table {
+//   table-layout: fixed;
+//   border-collapse: collapse;
+//   td {
+//     display: table-cell;
+//     height: 36px;
+//     border: 1px solid #e1e2e3;
+//   }
+// }
+.el-table {
+  td .cell {
+    height: 40px;
+    // line-height: 1.3;
+    .hide {
+      display: -webkit-box;
+      text-overflow: ellipsis;
+      overflow: hidden;
+      -webkit-line-clamp: 3;
+      -webkit-box-orient: vertical;
+      white-space: pre-line;
+    }
   }
 }
 </style>

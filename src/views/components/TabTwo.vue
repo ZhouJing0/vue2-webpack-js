@@ -1,589 +1,596 @@
-
 <template>
-  <el-form
-    :model="formData"
-    ref="vForm"
-    :rules="rules"
-    label-position="left"
-    label-width="0px"
-    size="medium"
-    @submit.native.prevent
-  >
-    <div class="table-container">
-      <table class="table-layout">
-        <tbody>
-          <tr style="background:#0049d4">
-            <td class="table-cell flex" colspan="10">
-              <span class="left">编制单位：测试企业一</span>
-              <span>年度：2022</span>
-              <span class="right">金额单位：万元</span>
-            </td>
-          </tr>
-          <tr style="background:#d9ecff">
-            <td class="table-cell" rowspan="2"></td>
-            <td class="table-cell" rowspan="2">计划投资总额</td>
-            <td class="table-cell" colspan="2">按投资方向划分</td>
-            <td class="table-cell" colspan="2">按项目阶段划分</td>
-            <td class="table-cell" colspan="3">按资金来源划分</td>
-            <td class="table-cell" rowspan="2">备注</td>
-          </tr>
-          <tr style="background:#d9ecff">
-            <td class="table-cell">主业</td>
-            <td class="table-cell">非主业</td>
-            <td class="table-cell">新开工</td>
-            <td class="table-cell">续建</td>
-            <td class="table-cell">自有资金</td>
-            <td class="table-cell">贷款</td>
-            <td class="table-cell">其他</td>
-          </tr>
-          <tr class="stripe">
-            <td class="table-cell">一、固定资产投资</td>
-            <td class="table-cell"></td>
-            <td class="table-cell"></td>
-            <td class="table-cell"></td>
-            <td class="table-cell"></td>
-            <td class="table-cell"></td>
-            <td class="table-cell"></td>
-            <td class="table-cell"></td>
-            <td class="table-cell"></td>
-            <td class="table-cell">
-              <el-form-item
-                label=""
-                label-width="0"
-                prop="textarea86505"
-                class="label-center-align"
-              >
-                <el-input
-                  type="textarea"
-                  v-model="formData.textarea86505"
-                  rows="2"
-                ></el-input>
-              </el-form-item>
-            </td>
-          </tr>
-          <tr class="stripe">
-            <td class="table-cell">（一）境内</td>
-            <td class="table-cell"></td>
-            <td class="table-cell">
-              <el-form-item
-                label=""
-                label-width="0"
-                prop="input74270"
-                class="label-center-align"
-              >
-                <el-input
-                  v-model="formData.input74270"
-                  type="text"
-                  clearable
-                ></el-input>
-              </el-form-item>
-            </td>
-            <td class="table-cell">
-              <el-form-item
-                label=""
-                label-width="0"
-                prop="input109019"
-                class="label-center-align"
-              >
-                <el-input
-                  v-model="formData.input109019"
-                  type="text"
-                  clearable
-                ></el-input>
-              </el-form-item>
-            </td>
-            <td class="table-cell">
-              <el-form-item
-                label=""
-                label-width="0"
-                prop="input91952"
-                class="label-center-align"
-              >
-                <el-input
-                  v-model="formData.input91952"
-                  type="text"
-                  clearable
-                ></el-input>
-              </el-form-item>
-            </td>
-            <td class="table-cell">
-              <el-form-item
-                label=""
-                label-width="0"
-                prop="input38365"
-                class="label-center-align"
-              >
-                <el-input
-                  v-model="formData.input38365"
-                  type="text"
-                  clearable
-                ></el-input>
-              </el-form-item>
-            </td>
-            <td class="table-cell">
-              <el-form-item
-                label=""
-                label-width="0"
-                prop="input59565"
-                class="label-center-align"
-              >
-                <el-input
-                  v-model="formData.input59565"
-                  type="text"
-                  clearable
-                ></el-input>
-              </el-form-item>
-            </td>
-            <td class="table-cell">
-              <el-form-item
-                label=""
-                label-width="0"
-                prop="input35791"
-                class="label-center-align"
-              >
-                <el-input
-                  v-model="formData.input35791"
-                  type="text"
-                  clearable
-                ></el-input>
-              </el-form-item>
-            </td>
-            <td class="table-cell">
-              <el-form-item
-                label=""
-                label-width="0"
-                prop="input54598"
-                class="label-center-align"
-              >
-                <el-input
-                  v-model="formData.input54598"
-                  type="text"
-                  clearable
-                ></el-input>
-              </el-form-item>
-            </td>
-            <td class="table-cell">
-              <el-form-item
-                label=""
-                label-width="0"
-                prop="textarea15042"
-                class="label-center-align"
-              >
-                <el-input
-                  type="textarea"
-                  v-model="formData.textarea15042"
-                  rows="2"
-                ></el-input>
-              </el-form-item>
-            </td>
-          </tr>
-          <tr class="stripe">
-            <td class="table-cell">（二）境外</td>
-            <td class="table-cell"></td>
-            <td class="table-cell">
-              <el-form-item label="" label-width="0" prop="input46755">
-                <el-input
-                  v-model="formData.input46755"
-                  type="text"
-                  clearable
-                ></el-input>
-              </el-form-item>
-            </td>
-            <td class="table-cell">
-              <el-form-item
-                label=""
-                label-width="0"
-                prop="input86435"
-                class="label-center-align"
-              >
-                <el-input
-                  v-model="formData.input86435"
-                  type="text"
-                  clearable
-                ></el-input>
-              </el-form-item>
-            </td>
-            <td class="table-cell">
-              <el-form-item
-                label=""
-                label-width="0"
-                prop="input75130"
-                class="label-center-align"
-              >
-                <el-input
-                  v-model="formData.input75130"
-                  type="text"
-                  clearable
-                ></el-input>
-              </el-form-item>
-            </td>
-            <td class="table-cell">
-              <el-form-item
-                label=""
-                label-width="0"
-                prop="input107189"
-                class="label-center-align"
-              >
-                <el-input
-                  v-model="formData.input107189"
-                  type="text"
-                  clearable
-                ></el-input>
-              </el-form-item>
-            </td>
-            <td class="table-cell">
-              <el-form-item
-                label=""
-                label-width="0"
-                prop="input96426"
-                class="label-center-align"
-              >
-                <el-input
-                  v-model="formData.input96426"
-                  type="text"
-                  clearable
-                ></el-input>
-              </el-form-item>
-            </td>
-            <td class="table-cell">
-              <el-form-item
-                label=""
-                label-width="0"
-                prop="input90038"
-                class="label-center-align"
-              >
-                <el-input
-                  v-model="formData.input90038"
-                  type="text"
-                  clearable
-                ></el-input>
-              </el-form-item>
-            </td>
-            <td class="table-cell">
-              <el-form-item
-                label=""
-                label-width="0"
-                prop="input43958"
-                class="label-center-align"
-              >
-                <el-input
-                  v-model="formData.input43958"
-                  type="text"
-                  clearable
-                ></el-input>
-              </el-form-item>
-            </td>
-            <td class="table-cell">
-              <el-form-item
-                label=""
-                label-width="0"
-                prop="textarea40095"
-                class="label-center-align"
-              >
-                <el-input
-                  type="textarea"
-                  v-model="formData.textarea40095"
-                  rows="2"
-                ></el-input>
-              </el-form-item>
-            </td>
-          </tr>
-          <tr class="stripe">
-            <td class="table-cell">二、股权投资</td>
-            <td class="table-cell"></td>
-            <td class="table-cell"></td>
-            <td class="table-cell"></td>
-            <td class="table-cell"></td>
-            <td class="table-cell"></td>
-            <td class="table-cell"></td>
-            <td class="table-cell"></td>
-            <td class="table-cell"></td>
-            <td class="table-cell">
-              <el-form-item
-                label=""
-                label-width="0"
-                prop="textarea56460"
-                class="label-center-align"
-              >
-                <el-input
-                  type="textarea"
-                  v-model="formData.textarea56460"
-                  rows="2"
-                ></el-input>
-              </el-form-item>
-            </td>
-          </tr>
-          <tr class="stripe">
-            <td class="table-cell">（一）境内</td>
-            <td class="table-cell"></td>
-            <td class="table-cell">
-              <el-form-item
-                label=""
-                label-width="0"
-                prop="input41874"
-                class="label-center-align"
-              >
-                <el-input
-                  v-model="formData.input41874"
-                  type="text"
-                  clearable
-                ></el-input>
-              </el-form-item>
-            </td>
-            <td class="table-cell">
-              <el-form-item
-                label=""
-                label-width="0"
-                prop="input61874"
-                class="label-center-align"
-              >
-                <el-input
-                  v-model="formData.input61874"
-                  type="text"
-                  clearable
-                ></el-input>
-              </el-form-item>
-            </td>
-            <td class="table-cell">
-              <el-form-item
-                label=""
-                label-width="0"
-                prop="input40630"
-                class="label-center-align"
-              >
-                <el-input
-                  v-model="formData.input40630"
-                  type="text"
-                  clearable
-                ></el-input>
-              </el-form-item>
-            </td>
-            <td class="table-cell">
-              <el-form-item
-                label=""
-                label-width="0"
-                prop="input102812"
-                class="label-center-align"
-              >
-                <el-input
-                  v-model="formData.input102812"
-                  type="text"
-                  clearable
-                ></el-input>
-              </el-form-item>
-            </td>
-            <td class="table-cell">
-              <el-form-item
-                label=""
-                label-width="0"
-                prop="input26292"
-                class="label-center-align"
-              >
-                <el-input
-                  v-model="formData.input26292"
-                  type="text"
-                  clearable
-                ></el-input>
-              </el-form-item>
-            </td>
-            <td class="table-cell">
-              <el-form-item
-                label=""
-                label-width="0"
-                prop="input82993"
-                class="label-center-align"
-              >
-                <el-input
-                  v-model="formData.input82993"
-                  type="text"
-                  clearable
-                ></el-input>
-              </el-form-item>
-            </td>
-            <td class="table-cell">
-              <el-form-item
-                label=""
-                label-width="0"
-                prop="input18112"
-                class="label-center-align"
-              >
-                <el-input
-                  v-model="formData.input18112"
-                  type="text"
-                  clearable
-                ></el-input>
-              </el-form-item>
-            </td>
-            <td class="table-cell">
-              <el-form-item
-                label=""
-                label-width="0"
-                prop="textarea105673"
-                class="label-center-align"
-              >
-                <el-input
-                  type="textarea"
-                  v-model="formData.textarea105673"
-                  rows="2"
-                ></el-input>
-              </el-form-item>
-            </td>
-          </tr>
-          <tr class="stripe">
-            <td class="table-cell">（二）境外</td>
-            <td class="table-cell"></td>
-            <td class="table-cell">
-              <el-form-item
-                label=""
-                label-width="0"
-                prop="input23589"
-                class="label-center-align"
-              >
-                <el-input
-                  v-model="formData.input23589"
-                  type="text"
-                  clearable
-                ></el-input>
-              </el-form-item>
-            </td>
-            <td class="table-cell">
-              <el-form-item
-                label=""
-                label-width="0"
-                prop="input49202"
-                class="label-center-align"
-              >
-                <el-input
-                  v-model="formData.input49202"
-                  type="text"
-                  clearable
-                ></el-input>
-              </el-form-item>
-            </td>
-            <td class="table-cell">
-              <el-form-item
-                label=""
-                label-width="0"
-                prop="input42364"
-                class="label-center-align"
-              >
-                <el-input
-                  v-model="formData.input42364"
-                  type="text"
-                  clearable
-                ></el-input>
-              </el-form-item>
-            </td>
-            <td class="table-cell">
-              <el-form-item
-                label=""
-                label-width="0"
-                prop="input54311"
-                class="label-center-align"
-              >
-                <el-input
-                  v-model="formData.input54311"
-                  type="text"
-                  clearable
-                ></el-input>
-              </el-form-item>
-            </td>
-            <td class="table-cell">
-              <el-form-item
-                label=""
-                label-width="0"
-                prop="input54872"
-                class="label-center-align"
-              >
-                <el-input
-                  v-model="formData.input54872"
-                  type="text"
-                  clearable
-                ></el-input>
-              </el-form-item>
-            </td>
-            <td class="table-cell">
-              <el-form-item
-                label=""
-                label-width="0"
-                prop="input49832"
-                class="label-center-align"
-              >
-                <el-input
-                  v-model="formData.input49832"
-                  type="text"
-                  clearable
-                ></el-input>
-              </el-form-item>
-            </td>
-            <td class="table-cell">
-              <el-form-item
-                label=""
-                label-width="0"
-                prop="input86933"
-                class="label-center-align"
-              >
-                <el-input
-                  v-model="formData.input86933"
-                  type="text"
-                  clearable
-                ></el-input>
-              </el-form-item>
-            </td>
-            <td class="table-cell">
-              <el-form-item
-                label=""
-                label-width="0"
-                prop="textarea88236"
-                class="label-center-align"
-              >
-                <el-input
-                  type="textarea"
-                  v-model="formData.textarea88236"
-                  rows="2"
-                ></el-input>
-              </el-form-item>
-            </td>
-          </tr>
-          <tr class="stripe">
-            <td class="table-cell">三、合计</td>
-            <td class="table-cell"></td>
-            <td class="table-cell"></td>
-            <td class="table-cell"></td>
-            <td class="table-cell"></td>
-            <td class="table-cell"></td>
-            <td class="table-cell"></td>
-            <td class="table-cell"></td>
-            <td class="table-cell"></td>
-            <td class="table-cell">
-              <el-form-item
-                label=""
-                label-width="0"
-                prop="textarea90321"
-                class="label-center-align"
-              >
-                <el-input
-                  type="textarea"
-                  v-model="formData.textarea90321"
-                  size="medium"
-                  rows="2"
-                ></el-input>
-              </el-form-item>
-            </td>
-          </tr>
-        </tbody>
-      </table>
-    </div>
-  </el-form>
+  <div>
+    {{ formData.id }}
+    <el-form
+      :model="data"
+      ref="vForm"
+      :rules="rules"
+      label-position="left"
+      label-width="0px"
+      size="medium"
+      @submit.native.prevent
+    >
+      <div class="table-container">
+        <table class="table-layout">
+          <tbody>
+            <tr style="background: #0049d4">
+              <td class="table-cell flex" colspan="10">
+                <span class="left">编制单位：测试企业一</span>
+                <span>年度：2022</span>
+                <span class="right">金额单位：万元</span>
+              </td>
+            </tr>
+            <tr style="background: #d9ecff">
+              <td class="table-cell" rowspan="2"></td>
+              <td class="table-cell" rowspan="2">计划投资总额</td>
+              <td class="table-cell" colspan="2">按投资方向划分</td>
+              <td class="table-cell" colspan="2">按项目阶段划分</td>
+              <td class="table-cell" colspan="3">按资金来源划分</td>
+              <td class="table-cell" rowspan="2">备注</td>
+            </tr>
+            <tr style="background: #d9ecff">
+              <td class="table-cell">主业</td>
+              <td class="table-cell">非主业</td>
+              <td class="table-cell">新开工</td>
+              <td class="table-cell">续建</td>
+              <td class="table-cell">自有资金</td>
+              <td class="table-cell">贷款</td>
+              <td class="table-cell">其他</td>
+            </tr>
+            <tr class="stripe">
+              <td class="table-cell">一、固定资产投资</td>
+              <td class="table-cell"></td>
+              <td class="table-cell"></td>
+              <td class="table-cell"></td>
+              <td class="table-cell"></td>
+              <td class="table-cell"></td>
+              <td class="table-cell"></td>
+              <td class="table-cell"></td>
+              <td class="table-cell"></td>
+              <td class="table-cell">
+                <el-form-item
+                  label=""
+                  label-width="0"
+                  prop="textarea86505"
+                  class="label-center-align"
+                >
+                  <el-input
+                    type="textarea"
+                    v-model="data.textarea86505"
+                    rows="2"
+                  ></el-input>
+                </el-form-item>
+              </td>
+            </tr>
+            <tr class="stripe">
+              <td class="table-cell">（一）境内</td>
+              <td class="table-cell"></td>
+              <td class="table-cell">
+                <el-form-item
+                  label=""
+                  label-width="0"
+                  prop="input74270"
+                  class="label-center-align"
+                >
+                  <el-input
+                    v-model="data.input74270"
+                    type="text"
+                    clearable
+                  ></el-input>
+                </el-form-item>
+              </td>
+              <td class="table-cell">
+                <el-form-item
+                  label=""
+                  label-width="0"
+                  prop="input109019"
+                  class="label-center-align"
+                >
+                  <el-input
+                    v-model="data.input109019"
+                    type="text"
+                    clearable
+                  ></el-input>
+                </el-form-item>
+              </td>
+              <td class="table-cell">
+                <el-form-item
+                  label=""
+                  label-width="0"
+                  prop="input91952"
+                  class="label-center-align"
+                >
+                  <el-input
+                    v-model="data.input91952"
+                    type="text"
+                    clearable
+                  ></el-input>
+                </el-form-item>
+              </td>
+              <td class="table-cell">
+                <el-form-item
+                  label=""
+                  label-width="0"
+                  prop="input38365"
+                  class="label-center-align"
+                >
+                  <el-input
+                    v-model="data.input38365"
+                    type="text"
+                    clearable
+                  ></el-input>
+                </el-form-item>
+              </td>
+              <td class="table-cell">
+                <el-form-item
+                  label=""
+                  label-width="0"
+                  prop="input59565"
+                  class="label-center-align"
+                >
+                  <el-input
+                    v-model="data.input59565"
+                    type="text"
+                    clearable
+                  ></el-input>
+                </el-form-item>
+              </td>
+              <td class="table-cell">
+                <el-form-item
+                  label=""
+                  label-width="0"
+                  prop="input35791"
+                  class="label-center-align"
+                >
+                  <el-input
+                    v-model="data.input35791"
+                    type="text"
+                    clearable
+                  ></el-input>
+                </el-form-item>
+              </td>
+              <td class="table-cell">
+                <el-form-item
+                  label=""
+                  label-width="0"
+                  prop="input54598"
+                  class="label-center-align"
+                >
+                  <el-input
+                    v-model="data.input54598"
+                    type="text"
+                    clearable
+                  ></el-input>
+                </el-form-item>
+              </td>
+              <td class="table-cell">
+                <el-form-item
+                  label=""
+                  label-width="0"
+                  prop="textarea15042"
+                  class="label-center-align"
+                >
+                  <el-input
+                    type="textarea"
+                    v-model="data.textarea15042"
+                    rows="2"
+                  ></el-input>
+                </el-form-item>
+              </td>
+            </tr>
+            <tr class="stripe">
+              <td class="table-cell">（二）境外</td>
+              <td class="table-cell"></td>
+              <td class="table-cell">
+                <el-form-item label="" label-width="0" prop="input46755">
+                  <el-input
+                    v-model="data.input46755"
+                    type="text"
+                    clearable
+                  ></el-input>
+                </el-form-item>
+              </td>
+              <td class="table-cell">
+                <el-form-item
+                  label=""
+                  label-width="0"
+                  prop="input86435"
+                  class="label-center-align"
+                >
+                  <el-input
+                    v-model="data.input86435"
+                    type="text"
+                    clearable
+                  ></el-input>
+                </el-form-item>
+              </td>
+              <td class="table-cell">
+                <el-form-item
+                  label=""
+                  label-width="0"
+                  prop="input75130"
+                  class="label-center-align"
+                >
+                  <el-input
+                    v-model="data.input75130"
+                    type="text"
+                    clearable
+                  ></el-input>
+                </el-form-item>
+              </td>
+              <td class="table-cell">
+                <el-form-item
+                  label=""
+                  label-width="0"
+                  prop="input107189"
+                  class="label-center-align"
+                >
+                  <el-input
+                    v-model="data.input107189"
+                    type="text"
+                    clearable
+                  ></el-input>
+                </el-form-item>
+              </td>
+              <td class="table-cell">
+                <el-form-item
+                  label=""
+                  label-width="0"
+                  prop="input96426"
+                  class="label-center-align"
+                >
+                  <el-input
+                    v-model="data.input96426"
+                    type="text"
+                    clearable
+                  ></el-input>
+                </el-form-item>
+              </td>
+              <td class="table-cell">
+                <el-form-item
+                  label=""
+                  label-width="0"
+                  prop="input90038"
+                  class="label-center-align"
+                >
+                  <el-input
+                    v-model="data.input90038"
+                    type="text"
+                    clearable
+                  ></el-input>
+                </el-form-item>
+              </td>
+              <td class="table-cell">
+                <el-form-item
+                  label=""
+                  label-width="0"
+                  prop="input43958"
+                  class="label-center-align"
+                >
+                  <el-input
+                    v-model="data.input43958"
+                    type="text"
+                    clearable
+                  ></el-input>
+                </el-form-item>
+              </td>
+              <td class="table-cell">
+                <el-form-item
+                  label=""
+                  label-width="0"
+                  prop="textarea40095"
+                  class="label-center-align"
+                >
+                  <el-input
+                    type="textarea"
+                    v-model="data.textarea40095"
+                    rows="2"
+                  ></el-input>
+                </el-form-item>
+              </td>
+            </tr>
+            <tr class="stripe">
+              <td class="table-cell">二、股权投资</td>
+              <td class="table-cell"></td>
+              <td class="table-cell"></td>
+              <td class="table-cell"></td>
+              <td class="table-cell"></td>
+              <td class="table-cell"></td>
+              <td class="table-cell"></td>
+              <td class="table-cell"></td>
+              <td class="table-cell"></td>
+              <td class="table-cell">
+                <el-form-item
+                  label=""
+                  label-width="0"
+                  prop="textarea56460"
+                  class="label-center-align"
+                >
+                  <el-input
+                    type="textarea"
+                    v-model="data.textarea56460"
+                    rows="2"
+                  ></el-input>
+                </el-form-item>
+              </td>
+            </tr>
+            <tr class="stripe">
+              <td class="table-cell">（一）境内</td>
+              <td class="table-cell"></td>
+              <td class="table-cell">
+                <el-form-item
+                  label=""
+                  label-width="0"
+                  prop="input41874"
+                  class="label-center-align"
+                >
+                  <el-input
+                    v-model="data.input41874"
+                    type="text"
+                    clearable
+                  ></el-input>
+                </el-form-item>
+              </td>
+              <td class="table-cell">
+                <el-form-item
+                  label=""
+                  label-width="0"
+                  prop="input61874"
+                  class="label-center-align"
+                >
+                  <el-input
+                    v-model="data.input61874"
+                    type="text"
+                    clearable
+                  ></el-input>
+                </el-form-item>
+              </td>
+              <td class="table-cell">
+                <el-form-item
+                  label=""
+                  label-width="0"
+                  prop="input40630"
+                  class="label-center-align"
+                >
+                  <el-input
+                    v-model="data.input40630"
+                    type="text"
+                    clearable
+                  ></el-input>
+                </el-form-item>
+              </td>
+              <td class="table-cell">
+                <el-form-item
+                  label=""
+                  label-width="0"
+                  prop="input102812"
+                  class="label-center-align"
+                >
+                  <el-input
+                    v-model="data.input102812"
+                    type="text"
+                    clearable
+                  ></el-input>
+                </el-form-item>
+              </td>
+              <td class="table-cell">
+                <el-form-item
+                  label=""
+                  label-width="0"
+                  prop="input26292"
+                  class="label-center-align"
+                >
+                  <el-input
+                    v-model="data.input26292"
+                    type="text"
+                    clearable
+                  ></el-input>
+                </el-form-item>
+              </td>
+              <td class="table-cell">
+                <el-form-item
+                  label=""
+                  label-width="0"
+                  prop="input82993"
+                  class="label-center-align"
+                >
+                  <el-input
+                    v-model="data.input82993"
+                    type="text"
+                    clearable
+                  ></el-input>
+                </el-form-item>
+              </td>
+              <td class="table-cell">
+                <el-form-item
+                  label=""
+                  label-width="0"
+                  prop="input18112"
+                  class="label-center-align"
+                >
+                  <el-input
+                    v-model="data.input18112"
+                    type="text"
+                    clearable
+                  ></el-input>
+                </el-form-item>
+              </td>
+              <td class="table-cell">
+                <el-form-item
+                  label=""
+                  label-width="0"
+                  prop="textarea105673"
+                  class="label-center-align"
+                >
+                  <el-input
+                    type="textarea"
+                    v-model="data.textarea105673"
+                    rows="2"
+                  ></el-input>
+                </el-form-item>
+              </td>
+            </tr>
+            <tr class="stripe">
+              <td class="table-cell">（二）境外</td>
+              <td class="table-cell"></td>
+              <td class="table-cell">
+                <el-form-item
+                  label=""
+                  label-width="0"
+                  prop="input23589"
+                  class="label-center-align"
+                >
+                  <el-input
+                    v-model="data.input23589"
+                    type="text"
+                    clearable
+                  ></el-input>
+                </el-form-item>
+              </td>
+              <td class="table-cell">
+                <el-form-item
+                  label=""
+                  label-width="0"
+                  prop="input49202"
+                  class="label-center-align"
+                >
+                  <el-input
+                    v-model="data.input49202"
+                    type="text"
+                    clearable
+                  ></el-input>
+                </el-form-item>
+              </td>
+              <td class="table-cell">
+                <el-form-item
+                  label=""
+                  label-width="0"
+                  prop="input42364"
+                  class="label-center-align"
+                >
+                  <el-input
+                    v-model="data.input42364"
+                    type="text"
+                    clearable
+                  ></el-input>
+                </el-form-item>
+              </td>
+              <td class="table-cell">
+                <el-form-item
+                  label=""
+                  label-width="0"
+                  prop="input54311"
+                  class="label-center-align"
+                >
+                  <el-input
+                    v-model="data.input54311"
+                    type="text"
+                    clearable
+                  ></el-input>
+                </el-form-item>
+              </td>
+              <td class="table-cell">
+                <el-form-item
+                  label=""
+                  label-width="0"
+                  prop="input54872"
+                  class="label-center-align"
+                >
+                  <el-input
+                    v-model="data.input54872"
+                    type="text"
+                    clearable
+                  ></el-input>
+                </el-form-item>
+              </td>
+              <td class="table-cell">
+                <el-form-item
+                  label=""
+                  label-width="0"
+                  prop="input49832"
+                  class="label-center-align"
+                >
+                  <el-input
+                    v-model="data.input49832"
+                    type="text"
+                    clearable
+                  ></el-input>
+                </el-form-item>
+              </td>
+              <td class="table-cell">
+                <el-form-item
+                  label=""
+                  label-width="0"
+                  prop="input86933"
+                  class="label-center-align"
+                >
+                  <el-input
+                    v-model="data.input86933"
+                    type="text"
+                    clearable
+                  ></el-input>
+                </el-form-item>
+              </td>
+              <td class="table-cell">
+                <el-form-item
+                  label=""
+                  label-width="0"
+                  prop="textarea88236"
+                  class="label-center-align"
+                >
+                  <el-input
+                    type="textarea"
+                    v-model="data.textarea88236"
+                    rows="2"
+                  ></el-input>
+                </el-form-item>
+              </td>
+            </tr>
+            <tr class="stripe">
+              <td class="table-cell">三、合计</td>
+              <td class="table-cell"></td>
+              <td class="table-cell"></td>
+              <td class="table-cell"></td>
+              <td class="table-cell"></td>
+              <td class="table-cell"></td>
+              <td class="table-cell"></td>
+              <td class="table-cell"></td>
+              <td class="table-cell"></td>
+              <td class="table-cell">
+                <el-form-item
+                  label=""
+                  label-width="0"
+                  prop="textarea90321"
+                  class="label-center-align"
+                >
+                  <el-input
+                    type="textarea"
+                    v-model="data.textarea90321"
+                    size="medium"
+                    rows="2"
+                  ></el-input>
+                </el-form-item>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </el-form>
+  </div>
 </template>
 
 <script>
+import { json } from "../DLJSON/d3.v5";
 export default {
   components: {},
-  props: {},
+  props: {
+    formData: {
+      type: Object,
+    },
+  },
   data() {
     return {
-      formData: {
+      data: {
         textarea86505: "",
         input74270: "",
         input109019: "",
@@ -825,6 +832,14 @@ export default {
   created() {},
   mounted() {},
   methods: {
+    save() {
+      let data = JSON.parse(
+        JSON.stringify(this.formData.twoData.filter((el) => el.type == "0"))
+      );
+      let saveData = [{ name: "wda", id: "12453", type: "1" }];
+      this.formData.twoData = data.conccat(saveData);
+      console.log(saveData);
+    },
     submitForm() {
       this.$refs["vForm"].validate((valid) => {
         if (!valid) return;
@@ -839,7 +854,7 @@ export default {
 </script>
 
 <style lang="less">
-table .el-form-item{
+table .el-form-item {
   margin-bottom: 0;
 }
 .el-input-number.full-width-input,
@@ -935,22 +950,22 @@ div.tab-container {
     margin: 0;
   }
 }
-.el-tabs__content{
+.el-tabs__content {
   border-radius: 5px;
 }
-table tr.stripe:nth-child(odd){
+table tr.stripe:nth-child(odd) {
   background: #d9ecff;
 }
-table td{
+table td {
   padding: 8px;
-  &.flex{
+  &.flex {
     color: #fff;
     height: 30px !important;
     padding: 10px;
-    .left{
+    .left {
       float: left;
     }
-    .right{
+    .right {
       float: right;
     }
   }

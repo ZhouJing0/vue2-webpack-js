@@ -1,34 +1,38 @@
 # vue2-webpack-js
 
 ## Project setup
+
 ```
 yarn install
 ```
 
 ### Compiles and hot-reloads for development
+
 ```
 yarn serve
 ```
 
 ### Compiles and minifies for production
+
 ```
 yarn build
 ```
 
 ### Lints and fixes files
+
 ```
 yarn lint
 ```
 
 ### Customize configuration
+
 See [Configuration Reference](https://cli.vuejs.org/config/).
 
-
-   "@amap/amap-jsapi-loader": "^1.0.1", //高德地图(https://lbs.amap.com/api/jsapi-v2/guide/webcli/map-vue1)
-    "axios": "^0.27.2",  //
-    "bpmn-js": "^8.8.3", //工作流
-    "bpmn-js-properties-panel": "^0.46.0",
-    "camunda-bpmn-moddle": "^4.5.0",
+"@amap/amap-jsapi-loader": "^1.0.1", //高德地图(https://lbs.amap.com/api/jsapi-v2/guide/webcli/map-vue1)
+"axios": "^0.27.2", //
+"bpmn-js": "^8.8.3", //工作流
+"bpmn-js-properties-panel": "^0.46.0",
+"camunda-bpmn-moddle": "^4.5.0",
 
     "core-js": "^3.8.3",
     "d3": "5", //组织机构树可视化(https://d3js.org/)
@@ -43,5 +47,8 @@ See [Configuration Reference](https://cli.vuejs.org/config/).
     "vue-context": "^6.0.0", //右键上下文菜单(https://madewith.cn/676)
     "vue-router": "^3.5.1",
     "vuex": "^3.6.2"
-
+    "vue-quill-editor" // 富文本编辑器
+    "monaco-editor" // 代码编辑器
+    "tui-editor" // Markdown
+    "vue-json-viewer" // JSON Viewer
     百度地图 JavaScript API v3.0

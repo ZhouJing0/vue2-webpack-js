@@ -16,12 +16,23 @@
       <router-link to="/table">Table</router-link> |
       <router-link to="/right">RightClick</router-link> |
       <router-link to="/traffic">交通</router-link> |
+      <router-link to="/mobile">适配</router-link> |
+      <router-link :to="{ name: 'pdf', params: { name: '1' } }"
+        >PDF预览</router-link
+      >
+      |
     </nav>
-    <keep-alive include="TreeItem">
+    <keep-alive include="MyView">
       <router-view />
     </keep-alive>
   </div>
 </template>
+<script>
+export default {
+  name: "App",
+  methods: {},
+};
+</script>
 
 <style>
 #app {

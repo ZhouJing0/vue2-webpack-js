@@ -1,6 +1,9 @@
 <template>
   <div class="tab-container">
     <!-- <el-tabs v-model="tab41451ActiveTab" type="border-card" @tab-click="handleTabChange"> -->
+    <el-button type="primary" :loading="loading" @click="handleSave"
+      >保存</el-button
+    >
     <el-tabs v-model="activeName" @tab-click="handleTabChange">
       <el-tab-pane :name="tab.name" v-for="tab in tabList" :key="tab.id">
         <span slot="label">
@@ -10,37 +13,14 @@
           ></i>
           <p>{{ tab.title }}</p>
         </span>
-        <component :is="tab.component"></component>
+        <component
+          ref="form"
+          v-model="loading"
+          :is="tab.component"
+          :formData="formData"
+        ></component>
       </el-tab-pane>
     </el-tabs>
-
-    <!-- <el-tab-pane name="tab-two" label="投资计划情况总表">
-          
-        </el-tab-pane>
-        <el-tab-pane name="tab-three" label="固定资产投资项目计划情况表">
-        </el-tab-pane>
-        <el-tab-pane name="tab-four" label="股权投资项目计划情况表">
-        </el-tab-pane>
-        <el-tab-pane name="tab-five" label="对外并购类投资项目计划情况表">
-        </el-tab-pane>
-        <el-tab-pane name="tab-six" label="境外特别关注类项目计划情况表">
-        </el-tab-pane>
-        <el-tab-pane name="tab-seven" label="按国民经济行业分类投资计划情况表">
-        </el-tab-pane>
-        <el-tab-pane name="tab-eight" label="战略性新兴产业投资计划情况表">
-        </el-tab-pane>
-        <el-tab-pane name="tab-nine" label="按区域分布境内投资计划情况表">
-        </el-tab-pane>
-        <el-tab-pane name="tab-ten" label="联系人信息">
-        </el-tab-pane>
-        <el-tab-pane name="tab-eleven" label="报告正文">
-        </el-tab-pane> -->
-    <!-- </el-tabs> -->
-    <!-- <component :is="tabName"></component> -->
-    <!-- <el-tabs v-model="activeName" @tab-click="handleClick">
-        <el-tab-pane label="label" name="name"></el-tab-pane>
-        <el-tab-pane label="label1" name="name1"></el-tab-pane>
-      </el-tabs> -->
   </div>
 </template>
 
@@ -75,7 +55,12 @@ export default {
   data() {
     return {
       tabName: "",
-      formData: {},
+      loading: false,
+      formData: {
+        id: "567ad56asfd56s67f7sdf67",
+        oneData: [],
+        twoData: [],
+      },
       rules: {},
       activeName: "tab-two",
     };
@@ -85,6 +70,15 @@ export default {
   created() {},
   mounted() {},
   methods: {
+    handleSave() {
+      console.log(this.$refs);
+      this.loading = true;
+      if (this.activeName == "tab-two") {
+        this.$refs.form[1].save();
+      } else if (this.activeName == "tab-one") {
+        this.$refs.form[0].save();
+      }
+    },
     //tab切换
     handleTabChange(tab, e) {
       console.log(tab.name, e);

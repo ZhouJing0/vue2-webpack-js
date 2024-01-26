@@ -6,6 +6,11 @@ Vue.use(VueRouter);
 
 const routes = [
   {
+    path: "/my",
+    name: "my",
+    component: () => import("../views/MyView.vue"),
+  },
+  {
     path: "/home",
     name: "home",
     component: HomeView,
@@ -13,11 +18,6 @@ const routes = [
   {
     path: "/",
     redirect: "/home",
-  },
-  {
-    path: "/my",
-    name: "my",
-    component: () => import("../views/MyView.vue"),
   },
   {
     path: "/you",
@@ -48,6 +48,11 @@ const routes = [
     path: "/area",
     name: "area",
     component: () => import("../views/AreaSelectMultiple.vue"),
+  },
+  {
+    path: "/mobile",
+    name: "mobile",
+    component: () => import("@/components/Generator/preview/index.vue"),
   },
   {
     path: "/map",
@@ -83,6 +88,14 @@ const routes = [
     path: "/traffic",
     name: "traffic",
     component: () => import("../views/TrafficView.vue"),
+  },
+  {
+    path: "/pdf",
+    name: "pdf",
+    component: () => import("../views/PdfView.vue"),
+    meta: {
+      name: "3213",
+    },
   },
   {
     path: "/about",
