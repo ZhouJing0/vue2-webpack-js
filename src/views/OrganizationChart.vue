@@ -422,29 +422,29 @@ export default {
         ],
       };
       console.log(JSON.stringify(__graph_json_data));
-      __graph_json_data.nodes.forEach((thisNode) => {
-        if (thisNode.text === "深圳市腾讯计算机系统有限公司") {
-          thisNode.width = 300;
-          thisNode.height = 100;
-          thisNode.offset_x = -80;
-        }
-        if (
-          thisNode.text === "张志东" ||
-          thisNode.text === "陈一丹" ||
-          thisNode.text === "许晨晔" ||
-          thisNode.text === "马化腾"
-        ) {
-          thisNode.width = 100;
-          thisNode.height = 80;
-          thisNode.offset_y = 80;
-        }
-        // 为节点《这个节点原本是没有子节点的》设置属性expandHolderPosition，使其在没有子节点的情况下也能显示【展开/收缩】按钮，当点击展开时动态加载子节点数据
-        if (thisNode.text === "这个节点原本是没有子节点的") {
-          thisNode.data = { asyncChild: true, loaded: false }; // 这是一个自定义属性，用来在后续判断如果点击了这个节点，则动态获取数据
-          thisNode.expandHolderPosition = "bottom";
-          thisNode.expanded = false;
-        }
-      });
+      // __graph_json_data.nodes.forEach((thisNode) => {
+      //   if (thisNode.text === "深圳市腾讯计算机系统有限公司") {
+      //     thisNode.width = 300;
+      //     thisNode.height = 100;
+      //     thisNode.offset_x = -80;
+      //   }
+      //   if (
+      //     thisNode.text === "张志东" ||
+      //     thisNode.text === "陈一丹" ||
+      //     thisNode.text === "许晨晔" ||
+      //     thisNode.text === "马化腾"
+      //   ) {
+      //     thisNode.width = 100;
+      //     thisNode.height = 80;
+      //     thisNode.offset_y = 80;
+      //   }
+      //   // 为节点《这个节点原本是没有子节点的》设置属性expandHolderPosition，使其在没有子节点的情况下也能显示【展开/收缩】按钮，当点击展开时动态加载子节点数据
+      //   if (thisNode.text === "这个节点原本是没有子节点的") {
+      //     thisNode.data = { asyncChild: true, loaded: false }; // 这是一个自定义属性，用来在后续判断如果点击了这个节点，则动态获取数据
+      //     thisNode.expandHolderPosition = "bottom";
+      //     thisNode.expanded = false;
+      //   }
+      // });
       setTimeout(
         function () {
           this.g_loading = false;
@@ -499,5 +499,4 @@ export default {
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
-<style scoped>
-</style>
+<style scoped></style>

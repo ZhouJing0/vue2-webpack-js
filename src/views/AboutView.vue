@@ -4,13 +4,29 @@
 
     <h1>This is an about page</h1>
     <div class="wrap">
-      <!-- <el-input
-        @keyup.native="increase"
-        v-model="info"
-        placeholder=""
-      ></el-input> -->
+      <!-- <input
+        type="number"
+        data-id="1"
+        @input.native="handleInput(event)"
+        v-model="drctMainProjectSumIn"
+      /> -->
     </div>
-    <number-input @sendValue="getData" :money="true" :decimalCount="1" :default="false" :negative="true" v-model="num" :max="99999.8"> </number-input>
+    <div style="width: 50px">
+      <zj-tooltip :content="'2312312312'"> This is an about page </zj-tooltip>
+    </div>
+    <number-input
+      @sendValue="getData"
+      :default="true"
+      :isDecimal="true"
+      :money="true"
+      :negative="true"
+      v-model="num"
+      :decimalCount="9"
+      lang="zh-CN"
+      :moneyOption="{ style: 'currency', currency: 'CNY' }"
+      :max="9999999999.99"
+    >
+    </number-input>
     <!-- <ef-inputnumber @getValue="handleInput" v-model="num1"></ef-inputnumber> -->
     <button @click="num = 23">赋值</button>
     <component :is="'router-link'" v-bind="{ to: '/you' }">
@@ -43,8 +59,8 @@ export default {
   components: { VueJson },
   data() {
     return {
-      aa:{
-        model1: '',
+      aa: {
+        model1: "",
       },
       cityList: [],
       info: "",
@@ -429,42 +445,57 @@ export default {
       this.value = ["zhinan", "shejiyuanze", "yizhi"];
       this.cityList = [
         {
-            value: 'New York',
-            label: 'New York'
+          value: "New York",
+          label: "New York",
         },
         {
-            value: 'London',
-            label: 'London'
+          value: "London",
+          label: "London",
         },
         {
-            value: 'Sydney',
-            label: 'Sydney'
+          value: "Sydney",
+          label: "Sydney",
         },
         {
-            value: 'Ottawa',
-            label: 'Ottawa'
+          value: "Ottawa",
+          label: "Ottawa",
         },
         {
-            value: 'Paris',
-            label: 'Paris'
+          value: "Paris",
+          label: "Paris",
         },
         {
-            value: 'Canberra',
-            label: 'Canberra'
-        }
-      ]
+          value: "Canberra",
+          label: "Canberra",
+        },
+      ];
       // this.num = 22;
     }, 1000);
   },
-  mounted(){
-    setTimeout(()=>{
-      this.aa.model1 = 'New York'
-    },1222)
-    
+  mounted() {
+    setTimeout(() => {
+      this.aa.model1 = "New York";
+    }, 1222);
   },
   methods: {
+    handleInput(event) {
+      // 获取当前输入值
+      let inputText = event.target.value;
+
+      // 移除非数字和小数点的字符
+      inputText = inputText.replace(/[^0-9.]/g, "");
+
+      // 限制小数部分只能有两位
+      const parts = inputText.split(".");
+      if (parts[1] && parts[1].length > 2) {
+        inputText = parts[0] + "." + parts[1].slice(0, 2);
+      }
+
+      // 更新输入框的值
+      event.target.value = inputText;
+    },
     async save() {
-      this.$refs.form.validate()
+      this.$refs.form.validate();
       let a = await this.vis();
       console.log(a, "000");
       console.log(a === false);
@@ -490,25 +521,26 @@ export default {
         res(false);
       });
     },
-    increase(e) {
-      // console.log(e.target.value);
-      // let v = e.target.value;
-      const reg = new RegExp(
-        `^${this.negative ? "-?" : ""}(\\d{0,${this.integer}})((\\.)(\\d{0,${
-          this.decimalCount
-        }})?)?$`
-      );
-      if (!this.decimalCount) {
-        v = v.replace(/[^-?\d]/g, "");
-        v = v.replace(/^0+(\d)/, "$1");
-      } else {
-        v = v.replace(/[^-?\d.]/g, ""); // 只能输入数字和.
-        v = v.replace(/^\./g, ""); //第一个字符不能是.
-        v = v.replace(/\.{2,}/g, "."); // 不能连续输入.
-        v = v.replace(/(\.\d+)\./g, "$1"); // .后面不能再输入.
-        v = v.replace(/^0+(\d)/, "$1"); // 第一位0开头，0后面为数字，则过滤掉，取后面的数字
+    increase(event) {
+      let inputText = event.target.value;
+
+      // 保留数字和小数点，去除其他非法字符
+      inputText = inputText.replace(/[^0-9.]/g, "");
+
+      // 确保小数点只出现一次
+      const decimalCount = inputText.split(".").length - 1;
+      if (decimalCount > 1) {
+        inputText = inputText.slice(0, -1);
       }
-      this.info = v;
+
+      // 限制小数部分只能有两位
+      const parts = inputText.split(".");
+      if (parts[1] && parts[1].length > 2) {
+        inputText = parts[0] + "." + parts[1].slice(0, 2);
+      }
+
+      // 更新输入框的值
+      event.target.value = inputText;
     },
     viewPdf() {
       window.open(
@@ -516,7 +548,7 @@ export default {
       );
     },
     getData(e) {
-      console.log(e, "获取data");
+      // console.log(e, "获取data");
     },
     handleInput(e) {
       console.log(e, "111111");

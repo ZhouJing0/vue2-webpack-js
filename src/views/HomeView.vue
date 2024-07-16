@@ -1,5 +1,9 @@
 <template>
   <div id="HelloWorld">
+    <hsk-com :tel="22312312">
+    </hsk-com>
+    <hsk-input :negative="true"></hsk-input>
+    <CELCooperateProject></CELCooperateProject>
     <el-row>
       <el-col :span="3">
         <el-form
@@ -90,10 +94,7 @@
 <script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
 
 <!-- 加载 Select2 -->
-<link
-  href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.8/css/select2.min.css"
-  rel="stylesheet"
-/>
+
 <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.8/js/select2.min.js"></script>
 
 <script>
@@ -105,14 +106,16 @@ const units = {
   GB: 1024 * 1024 * 1024,
 };
 import axios from "axios";
+import dataJson from "./components/data";
 import Treeselect from "@riophae/vue-treeselect";
 import "@riophae/vue-treeselect/dist/vue-treeselect.css";
-import test from "test";
 export default {
   // register the component
   components: { Treeselect },
   data() {
     return {
+      num:'',
+      tableData: [],
       // 总行数
       titleTotal: 50,
       // 总行数
@@ -161,6 +164,7 @@ export default {
             label: "c",
           },
         ],
+
         props: {
           children: "children",
           label: "label",
@@ -238,7 +242,7 @@ export default {
     };
   },
   created() {
-    test();
+    this.tableData = dataJson;
     // 初始化 这里的回调：在不发送数据时，其他链接发送了数据，通过这个回调接收数据
     this.socketServe = new websocket("ws://localhost:3001", (data) => {});
     //页面销毁时关闭长连接

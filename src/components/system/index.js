@@ -6,6 +6,8 @@ import publicTable from "./publicTable.vue";
 import publicForm from "./publicForm.vue";
 import ElTreeSelect from "./treeSelect";
 import publicUpload from "./publicUpload.vue";
+import Popinput from "./Popinput.vue";
+import ZjTooltip from "./ZjTooltip.vue";
 
 export default {
   install(Vue, options) {
@@ -16,5 +18,7 @@ export default {
     Vue.component("publicForm", publicForm);
     Vue.component("ElTreeSelect", ElTreeSelect);
     Vue.component("publicUpload", publicUpload);
+    Vue.component("Popinput", Popinput);
+    Vue.component("ZjTooltip", ZjTooltip);
   },
 };

@@ -40,6 +40,20 @@ export default {
           title: "EQ",
           component: "tab-four",
         },
+        {
+          id: "04",
+          name: "tab-five",
+          icon: "el-icon-message-solid",
+          title: "EQ",
+          component: "tab-five",
+        },
+        {
+          id: "05",
+          name: "tab-six",
+          icon: "el-icon-message-solid",
+          title: "EQ",
+          component: "tab-six",
+        },
       ],
     };
   },

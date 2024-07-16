@@ -2,13 +2,13 @@
   <div class="tooltip-wrap">
     <el-tooltip
       ref="tlp"
-      :content="text"
+      :content="content"
       effect="dark"
       :disabled="!tooltipFlag"
       :placement="placement"
     >
       <div class="over-flow" @mouseenter="visibilityChange($event)">
-        {{ text }}
+        <slot> </slot>
       </div>
     </el-tooltip>
   </div>
@@ -18,7 +18,7 @@
 export default {
   name: "tooltipWrap",
   props: {
-    text: { default: "" }, // 字符内容
+    content: { default: "" }, // 字符内容
     placement: { type: String, default: "top-start" },
     className: { type: String, default: "text" }, // class
   },
@@ -29,6 +29,24 @@ export default {
     };
   },
   methods: {
+    showTips(obj, row, prop) {
+      /*obj为鼠标移入时的事件对象*/
+      /*currentWidth 为文本在页面中所占的宽度，创建标签，加入到页面，获取currentWidth ,最后在移除*/
+      let TemporaryTag = document.createElement("span");
+      TemporaryTag.innerText = row[prop];
+      TemporaryTag.className = "getTextWidth";
+      document.querySelector("body").appendChild(TemporaryTag);
+      let currentWidth = document.querySelector(".getTextWidth").offsetWidth;
+      document.querySelector(".getTextWidth").remove();
+
+      /*cellWidth为表格容器的宽度*/
+      const cellWidth = obj.target.offsetWidth;
+
+      /*当文本宽度小于||等于容器宽度两倍时，代表文本显示未超过两行*/
+      currentWidth <= 3 * cellWidth
+        ? (row[`show${prop}`] = false)
+        : (row[`show${prop}`] = true);
+    },
     // tooltip的可控
     visibilityChange(event) {
       const ev = event.target;
@@ -47,10 +65,11 @@ export default {
 </script>
 
 <style scoped>
-.tooltip-wrap {
+/* .tooltip-wrap {
   height: 18px;
-}
+} */
 .over-flow {
+  -webkit-line-clamp: 3;
   overflow: hidden;
   white-space: nowrap;
   text-overflow: ellipsis;
