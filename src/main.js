@@ -2,9 +2,9 @@ import Vue from "vue";
 import ElementUI from "element-ui";
 import "element-ui/lib/theme-chalk/index.css";
 import App from "./App.vue";
-import hskui from 'hsk-ui'
+import hskui from "hsk-ui";
 import "hsk-ui/hskui.css";
-Vue.use(hskui)
+Vue.use(hskui);
 import VueVirtualScroller from "vue-virtual-scroller";
 import "vue-virtual-scroller/dist/vue-virtual-scroller.css";
 Vue.use(VueVirtualScroller);
@@ -23,7 +23,11 @@ import "vxe-table/lib/style.css";
 
 Vue.use(VXETable);
 Vue.use(ElementUI);
-
+// 导入组件库
+import NgFormElement from "ng-form-element";
+import "ng-form-element/lib/ng-form-element.css";
+// 注册组件库
+Vue.use(NgFormElement);
 // Vue.components(NumberInput);
 import vueZearyCtrl from "vue-zeary-ctrl";
 //参数默认值{lang:'zh',messageDuration:3000}

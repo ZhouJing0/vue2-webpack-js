@@ -17,6 +17,8 @@
       <router-link to="/right">RightClick</router-link> |
       <router-link to="/traffic">交通</router-link> |
       <router-link to="/mobile">适配</router-link> |
+      <router-link to="/flow">流程图</router-link> |
+      <router-link to="/upload">upload</router-link> |
       <router-link :to="{ name: 'pdf', params: { name: '1' } }"
         >PDF预览</router-link
       >

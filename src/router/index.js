@@ -52,7 +52,7 @@ const routes = [
   {
     path: "/mobile",
     name: "mobile",
-    component: () => import("@/components/Generator/preview/index.vue"),
+    component: () => import("@/views/Mobile.vue"),
   },
   {
     path: "/map",
@@ -96,6 +96,16 @@ const routes = [
     meta: {
       name: "3213",
     },
+  },
+  {
+    path: "/flow",
+    name: "flow",
+    component: () => import("../views/FlowView.vue"),
+  },
+  {
+    path: "/upload",
+    name: "upload",
+    component: () => import("../views/UploadView.vue"),
   },
   {
     path: "/about",

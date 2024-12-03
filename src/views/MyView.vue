@@ -12,7 +12,13 @@
     </el-form>
     <el-button type="primary" @click="handleXXX">xxx</el-button>
     <!-- <about-view> -->
-    <you-view :msg="msg" :info="data" size="small" @click="handleClick">
+    <you-view
+      :msg="msg"
+      :info="data"
+      size="small"
+      @aaa="handleAAA"
+      @click="handleClick"
+    >
       <template v-slot="{ num }">123{{ num }}</template>
     </you-view>
     <AndTable />
@@ -107,7 +113,9 @@ export default {
     handleClick() {
       console.log(1111);
     },
-
+    handleAAA() {
+      console.log(222);
+    },
     submitUpload() {
       this.$refs.upload.submit();
     },

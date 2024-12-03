@@ -1,7 +1,7 @@
 <!--
  * @Descripttion: 季度选择器
  * @version: 1.0
- * @Author: ZHOUZHOU
+ * @Author: ZhouJ
  * @Date: 2021-12-06
  * @LastEditTime: 2021-12-09
 -->

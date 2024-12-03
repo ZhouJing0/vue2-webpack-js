@@ -105,6 +105,11 @@ export default {
       type: Boolean,
       default: true,
     },
+    // 是否获取焦点转为数字
+    changeNum: {
+      type: Boolean,
+      default: false,
+    },
   },
   data() {
     return {
@@ -238,8 +243,11 @@ export default {
           realValue = "";
         }
       }
-      // this.inputValue = realValue && Number(realValue)
-      this.inputValue = realValue;
+      if (this.changeNum) {
+        this.inputValue = realValue && Number(realValue);
+      } else {
+        this.inputValue = realValue;
+      }
     },
     formatRoundNum(num, pre) {
       return (Math.round(num * Math.pow(10, pre)) / Math.pow(10, pre)).toFixed(

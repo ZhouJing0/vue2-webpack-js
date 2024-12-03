@@ -14,6 +14,7 @@
     <el-button type="primary" v-bind="$attrs" v-on="$listeners"
       >CHANGR</el-button
     >
+    <el-button @click="$emit('aaa')"> 'emit' </el-button>
     <el-table :data="tableData">
       <el-table-column
         header-align="center"
@@ -122,6 +123,9 @@ export default {
     this.loadList(1000);
   },
   methods: {
+    handleAAA() {
+      console.log(33333);
+    },
     loadList(size) {
       this.loading = true;
       this.mockList(size).then((data) => {

@@ -1,19 +1,67 @@
 <template>
-  <div>
-    <div
-      v-loading="g_loading"
-      style="
-        margin-top: 50px;
-        width: calc(100% - 10px);
-        height: calc(100vh - 140px);
-      "
-    >
-      <SeeksRelationGraph
-        ref="seeksRelationGraph"
-        :options="graphOptions"
-        :on-node-expand="onNodeExpand"
-      />
-    </div>
+  <div ref="myPage" style="width: calc(100% - 2px); height: calc(100vh - 50px)">
+    <SeeksRelationGraph ref="seeksRelationGraph" :options="graphOptions">
+      <template #graph-plug>
+        <div
+          v-if="isShowNodeTipsPanel"
+          :style="{
+            left: nodeMenuPanelPosition.x + 'px',
+            top: nodeMenuPanelPosition.y + 'px',
+          }"
+          style="
+            z-index: 999;
+            padding: 10px;
+            background-color: #ffffff;
+            border: #eeeeee solid 1px;
+            box-shadow: 0px 0px 8px #cccccc;
+            position: absolute;
+          "
+        >
+          <div class="my-node-tips">
+            <p>
+              企业名称: <span>{{ currentNode.text }}</span>
+            </p>
+            <p>
+              下级企业数量: <span>{{ currentNode.data.subOrgCount }} 家</span>
+            </p>
+          </div>
+        </div>
+      </template>
+      <template #node="{ node }">
+        <div>
+          <div
+            style="
+              width: 200px;
+              cursor: pointer;
+              text-align: left;
+              padding: 0px;
+            "
+          >
+            <div style="padding-left: 10px">净资产收益率</div>
+            <div
+              style="
+                background-color: #ffffff;
+                height: 80px;
+                color: #555555;
+                padding-left: 10px;
+                padding-top: 10px;
+                border-radius: 8px;
+              "
+            >
+              <div style="border-bottom: #efefef solid 1px">
+                当期【2022年12月】：12%
+              </div>
+              <div style="border-bottom: #efefef solid 1px">
+                同比：30% <i style="color: #ff0000" class="el-icon-top" />
+              </div>
+              <div style="border-bottom: #efefef solid 1px">
+                环比：10% <i style="color: green" class="el-icon-bottom" />
+              </div>
+            </div>
+          </div>
+        </div>
+      </template>
+    </SeeksRelationGraph>
   </div>
 </template>
 
@@ -22,481 +70,351 @@ import SeeksRelationGraph from "relation-graph";
 export default {
   name: "OrganizationChart",
   components: { SeeksRelationGraph },
+
   data() {
     return {
-      g_loading: true,
-      demoname: "---",
       graphOptions: {
-        backgrounImage: "http://ai-mark.cn/images/ai-mark-desc.png",
-        backgrounImageNoRepeat: true,
-        layouts: [
-          {
-            label: "中心",
-            layoutName: "tree",
-            layoutClassName: "seeks-layout-tree",
-            defaultJunctionPoint: "border",
-            defaultNodeShape: 0,
-            defaultLineShape: 1,
-            centerOffset_x: -300,
-            centerOffset_y: 0,
-            min_per_width: "60",
-            min_per_height: "400",
-          },
-        ],
-        defaultExpandHolderPosition: "bottom",
-        defaultLineShape: 4,
-        defaultJunctionPoint: "tb",
+        backgroundImage:
+          "https://ssl.relation-graph.com/images/relatioon-graph-canvas-bg.png",
+        backgroundImageNoRepeat: true,
+        disableDragNode: true,
+        defaultFocusRootNode: false,
+        disableNodeClickEffect: true,
+        disableLineClickEffect: true,
+        allowShowMiniToolBar: false,
+        defaultNodeBorderWidth: 2,
+        defaultNodeColor: "#fff",
+        defaultNodeBorderColor: "#000",
+        defaultNodeFontColor: "#000",
+        defaultLineWidth: 2,
         defaultNodeShape: 1,
-        defaultNodeWidth: "50",
-        defaultNodeHeight: "250",
-        defaultNodeBorderWidth: 0,
+        defaultLineMarker: {
+          markerWidth: 20,
+          markerHeight: 20,
+          refX: 3,
+          refY: 3,
+          data: "M 0 0, V 6, L 4 3, Z",
+        },
+        layout: {
+          label: "中心",
+          layoutName: "tree",
+          centerOffset_x: 0,
+          centerOffset_y: 0,
+          distance_coefficient: 1,
+          layoutDirection: "h",
+          from: "left",
+          levelDistance: "",
+          min_per_width: 100,
+          max_per_width: 500,
+          min_per_height: 300,
+          max_per_height: 500,
+        },
       },
     };
   },
-  created() {},
   mounted() {
-    this.demoname = this.$route.params.demoname;
-    this.setGraphData();
+    this.init();
   },
   methods: {
-    setGraphData() {
-      var __graph_json_data = {
-        rootId: "N1",
+    init() {
+      const graphData = {
+        rootId: "a",
         nodes: [
-          { id: "N1", text: "深圳市腾讯计算机系统有限公司", color: "#2E4E8F" },
-          { id: "N2", text: "张志东", color: "#4ea2f0" },
-          { id: "N3", text: "陈一丹", color: "#4ea2f0" },
-          { id: "N4", text: "许晨晔", color: "#4ea2f0" },
-          { id: "N5", text: "马化腾", color: "#4ea2f0" },
-          { id: "N6", text: "腾讯云科技有限公司", color: "#4ea2f0" },
-          { id: "N7", text: "腾讯医疗健康（深圳）有限公司", color: "#4ea2f0" },
           {
-            id: "N8",
-            text: "深圳市腾讯视频文化传播有限公司",
-            color: "#4ea2f0",
-          },
-          { id: "N9", text: "星创互联（北京）科技有限公司", color: "#4ea2f0" },
-          {
-            id: "N10",
-            text: "苏州钟鼎创业二号投资中心（有限合伙）",
-            color: "#4ea2f0",
-          },
-          { id: "N11", text: "北京驿码神通信息技术有限公司", color: "#4ea2f0" },
-          {
-            id: "N12",
-            text: "张家界（北京驿码神通）信息技术有限公司",
-            color: "#4ea2f0",
+            id: "a",
+            text: "a",
+            data: {
+              pic: "https://dss2.baidu.com/6ONYsjip0QIZ8tyhnq/it/u=2308340537,462224207&fm=58&app=83&f=JPEG?w=250&h=250&s=EC708F46DA96B89CB69D5DDA0300D014",
+              name: "侯亮平",
+              myicon: "el-icon-star-on",
+            },
           },
           {
-            id: "N13",
-            text: "滨海（天津）金融资产交易中心股份有限公司",
-            color: "#4ea2f0",
-          },
-          { id: "N14", text: "深圳腾富博投资有限公司", color: "#4ea2f0" },
-          { id: "N15", text: "腾讯影业文化传播有限公司", color: "#4ea2f0" },
-          {
-            id: "N16",
-            text: "霍尔果斯晓腾影业文化传播有限公司",
-            color: "#4ea2f0",
+            id: "b",
+            text: "b",
+            data: {
+              pic: "https://dss0.baidu.com/6ONWsjip0QIZ8tyhnq/it/u=2677153550,2207805387&fm=58&app=83&f=JPEG?w=250&h=250&s=249039DDC2D153D411A851360300C062",
+              name: "李达康",
+              myicon: "el-icon-setting",
+            },
           },
           {
-            id: "N17",
-            text: "苍穹互娱（天津）文化传播有限公司",
-            color: "#4ea2f0",
-          },
-          { id: "N18", text: "北京腾讯影业有限公司", color: "#4ea2f0" },
-          { id: "N19", text: "霍尔果斯腾影影视发行有限公司", color: "#4ea2f0" },
-          { id: "N20", text: "上海腾闻网络科技有限公司", color: "#4ea2f0" },
-          { id: "N21", text: "上海宝申数字科技有限公司", color: "#4ea2f0" },
-          { id: "N22", text: "海南高灯科技有限公司", color: "#4ea2f0" },
-          { id: "N23", text: "益盟股份有限公司", color: "#4ea2f0" },
-          { id: "N24", text: "北京魔方无限科技有限公司", color: "#4ea2f0" },
-          { id: "N25", text: "北京像素软件科技股份有限公司", color: "#4ea2f0" },
-          {
-            id: "N26",
-            text: "深圳市世纪腾华信息技术有限公司",
-            color: "#4ea2f0",
-          },
-          { id: "N27", text: "浙江齐聚科技有限公司", color: "#4ea2f0" },
-          { id: "N28", text: "未来电视有限公司", color: "#4ea2f0" },
-          { id: "N29", text: "北京腾新科技有限公司", color: "#4ea2f0" },
-          {
-            id: "N30",
-            text: "河北雄安新区腾讯计算机系统有限公司",
-            color: "#4ea2f0",
-          },
-          { id: "N31", text: "深圳市企鹅金融科技有限公司", color: "#4ea2f0" },
-          { id: "N32", text: "深圳市移卡科技有限公司", color: "#4ea2f0" },
-          { id: "N33", text: "财付通支付科技有限公司", color: "#4ea2f0" },
-          { id: "N34", text: "金保信社保卡科技有限公司", color: "#4ea2f0" },
-          { id: "N35", text: "网联清算有限公司", color: "#4ea2f0" },
-          { id: "N36", text: "北京搜狗信息服务有限公司", color: "#4ea2f0" },
-          { id: "N37", text: "北京网罗天下生活科技有限公司", color: "#4ea2f0" },
-          { id: "N120", text: "深圳市腾讯商业管理有限公司", color: "#4ea2f0" },
-          { id: "N121", text: "深圳市智税链科技有限公司", color: "#4ea2f0" },
-          {
-            id: "N122",
-            text: "横琴红土创新创业投资合伙企业（有限合伙）",
-            color: "#4ea2f0",
+            id: "b1",
+            text: "b1",
+            data: {
+              pic: "https://dss1.baidu.com/6ONXsjip0QIZ8tyhnq/it/u=1725297532,1915921796&fm=58&app=83&f=JPEG?w=250&h=250&s=FE8EA444A60759554DAC1DBB03000092",
+              name: "祁同伟",
+              myicon: "el-icon-setting",
+            },
           },
           {
-            id: "N123",
-            text: "上海挚信新经济一期股权投资合伙企业（有限合伙）",
-            color: "#4ea2f0",
+            id: "b2",
+            text: "b2",
+            data: {
+              pic: "https://dss2.baidu.com/6ONYsjip0QIZ8tyhnq/it/u=2025797948,1615296290&fm=58&app=83&f=JPEG?w=250&h=250&s=B5B04C331F32739C4604F9F503007021",
+              name: "陈岩石",
+              myicon: "el-icon-star-on",
+            },
           },
           {
-            id: "N124",
-            text: "上海云锋股权投资中心（有限合伙）",
-            color: "#4ea2f0",
+            id: "b3",
+            text: "b3",
+            data: {
+              pic: "https://dss1.baidu.com/6ONXsjip0QIZ8tyhnq/it/u=344720653,260255884&fm=58&app=83&f=JPEG?w=250&h=250&s=57B8AB676AE862941D94ED170300E060",
+              name: "陆亦可",
+              myicon: "el-icon-setting",
+            },
           },
           {
-            id: "N125",
-            text: "北京创新工场投资中心（有限合伙）",
-            color: "#4ea2f0",
+            id: "b4",
+            text: "b4",
+            data: {
+              pic: "https://dss0.baidu.com/6ONWsjip0QIZ8tyhnq/it/u=3098576865,849900134&fm=58&app=83&f=JPEG?w=250&h=250&s=EDE01A63A65917DC104509920300C0C1",
+              name: "高育良",
+              myicon: "el-icon-setting",
+            },
           },
           {
-            id: "N126",
-            text: "广州市擎天柱网络科技有限公司",
-            color: "#4ea2f0",
-          },
-          { id: "N127", text: "河南腾河网络科技有限公司", color: "#4ea2f0" },
-          {
-            id: "N128",
-            text: "深圳市财付通网络金融小额贷款有限公司",
-            color: "#4ea2f0",
+            id: "b5",
+            text: "b5",
+            data: {
+              pic: "https://dss0.baidu.com/6ONWsjip0QIZ8tyhnq/it/u=3722686698,2547355567&fm=58&app=83&f=JPEG?w=250&h=250&s=BF8A356E04E1B2BCEFA45D860100E0E1",
+              name: "沙瑞金",
+              myicon: "el-icon-star-on",
+            },
           },
           {
-            id: "N129",
-            text: "湖北腾楚网络科技有限责任公司",
-            color: "#4ea2f0",
-          },
-          { id: "N130", text: "腾讯征信有限公司", color: "#4ea2f0" },
-          { id: "N131", text: "百行征信有限公司", color: "#4ea2f0" },
-          {
-            id: "N132",
-            text: "广东腾南网络信息科技有限公司",
-            color: "#4ea2f0",
+            id: "b6",
+            text: "b6",
+            data: {
+              pic: "https://dss2.baidu.com/6ONYsjip0QIZ8tyhnq/it/u=4266886844,1791850012&fm=58&s=66B01AC758BB67960834B8FA0300C011",
+              name: "高小琴",
+              myicon: "el-icon-headset",
+            },
           },
           {
-            id: "N133",
-            text: "深圳市腾南网络信息科技有限公司",
-            color: "#4ea2f0",
-          },
-          { id: "N134", text: "广州腾威会展有限公司", color: "#4ea2f0" },
-          { id: "N135", text: "广州南极广告传媒有限公司", color: "#4ea2f0" },
-          { id: "N136", text: "广州壹糖网络科技有限公司", color: "#4ea2f0" },
-          { id: "N137", text: "广州玩心艺网络科技有限公司", color: "#4ea2f0" },
-          {
-            id: "N138",
-            text: "广东腾南网络信息科技有限公司深圳分公司",
-            color: "#4ea2f0",
+            id: "c",
+            text: "c",
+            data: {
+              pic: "https://dss1.baidu.com/6ONXsjip0QIZ8tyhnq/it/u=2747443453,2680399969&fm=58&app=83&f=JPEG?w=150&h=150&s=DB8828C1562265150814ADFE03007012",
+              name: "高小凤",
+              myicon: "el-icon-headset",
+            },
           },
           {
-            id: "N139",
-            text: "珠海横琴腾南网络信息科技有限公司",
-            color: "#4ea2f0",
+            id: "c1",
+            text: "c1",
+            data: {
+              pic: "https://dss2.baidu.com/6ONYsjip0QIZ8tyhnq/it/u=3301823375,1282024443&fm=58&app=83&f=JPG?w=250&h=250&s=2BC2834F2C22A25D12C06CA80300E013",
+              name: "赵东来",
+              myicon: "el-icon-s-tools",
+            },
           },
           {
-            id: "N140",
-            text: "这个节点原本是没有子节点的",
-            color: "rgba(255, 120, 0, 1)",
-            fontColor: "#000000",
+            id: "c2",
+            text: "c2",
+            data: {
+              pic: "https://dss1.baidu.com/6ONXsjip0QIZ8tyhnq/it/u=134233720,666111889&fm=58&app=83&f=JPG?w=250&h=250&s=4DE5A844801F1BD461E039A20300C0C3",
+              name: "程度",
+              myicon: "el-icon-star-on",
+            },
           },
           {
-            id: "N141",
-            text: "上海腾讯企鹅影视文化传播有限公司",
-            color: "#4ea2f0",
-          },
-          { id: "N142", text: "海南周天娱乐有限公司", color: "#4ea2f0" },
-          {
-            id: "N143",
-            text: "杭州红杉合远股权投资合伙企业（有限合伙）",
-            color: "#4ea2f0",
-          },
-          { id: "N144", text: "广州银汉科技有限公司", color: "#4ea2f0" },
-          { id: "N145", text: "深圳市文娱华彩科技有限公司", color: "#4ea2f0" },
-          { id: "N146", text: "林芝文娱本源科技有限公司", color: "#4ea2f0" },
-          { id: "N147", text: "深圳市文娱华章科技有限公司", color: "#4ea2f0" },
-          {
-            id: "N148",
-            text: "腾讯大地通途（北京）科技有限公司",
-            color: "#4ea2f0",
+            id: "c3",
+            text: "c3",
+            data: {
+              pic: "https://dss2.baidu.com/6ONYsjip0QIZ8tyhnq/it/u=1215039713,3597142764&fm=58&app=83&f=JPEG?w=250&h=250&s=1A20E0018E3B6E9CD10C7DA30300E081",
+              name: "吴惠芬",
+              myicon: "el-icon-s-promotion",
+            },
           },
           {
-            id: "N149",
-            text: "苏州钟鼎三号创业投资中心（有限合伙）",
-            color: "#4ea2f0",
+            id: "d",
+            text: "d",
+            data: {
+              pic: "https://dss2.baidu.com/6ONYsjip0QIZ8tyhnq/it/u=1140839330,2922201597&fm=58&app=83&f=JPEG?w=250&h=250&s=CDF9A844D45AB87512C8508B0100F080",
+              name: "赵瑞龙",
+              myicon: "el-icon-s-promotion",
+            },
           },
           {
-            id: "N150",
-            text: "永杨安风（北京）科技股份有限公司",
-            color: "#4ea2f0",
+            id: "d1",
+            text: "d1",
+            data: {
+              pic: "https://dss1.baidu.com/6ONXsjip0QIZ8tyhnq/it/u=2110325119,1633583088&fm=58&app=83&f=JPEG?w=120&h=120&s=971E35C05A43305DCA7C1C0B030080C",
+              name: "赵立春",
+              myicon: "el-icon-star-on",
+            },
           },
           {
-            id: "N151",
-            text: "霍尔果斯永杨安风网络科技有限公司",
-            color: "#4ea2f0",
-          },
-          { id: "N152", text: "辽宁腾辽科技有限公司", color: "#4ea2f0" },
-          { id: "N153", text: "沈阳小黄牛网络科技有限公司", color: "#4ea2f0" },
-          { id: "N154", text: "深圳市泰捷软件技术有限公司", color: "#4ea2f0" },
-          {
-            id: "N155",
-            text: "众安在线财产保险股份有限公司",
-            color: "#4ea2f0",
-          },
-          { id: "N156", text: "深圳市腾讯动漫有限公司", color: "#4ea2f0" },
-          { id: "N157", text: "北京奇迹开元文化有限公司", color: "#4ea2f0" },
-          { id: "N158", text: "浙江腾讯影业有限公司", color: "#4ea2f0" },
-          {
-            id: "N159",
-            text: "北京醋溜网络科技股份有限公司",
-            color: "#4ea2f0",
+            id: "d2",
+            text: "d2",
+            data: {
+              pic: "https://dss0.baidu.com/6ONWsjip0QIZ8tyhnq/it/u=1416498138,2265298708&fm=58&app=83&f=JPEG?w=250&h=250&s=F906CF1C0E1356D046AC3CEB0300B0A0",
+              name: "陈海",
+              myicon: "el-icon-s-promotion",
+            },
           },
           {
-            id: "N160",
-            text: "甘肃刚泰控股（集团）股份有限公司",
-            color: "#4ea2f0",
-          },
-          { id: "N161", text: "浙江腾越网络科技有限公司", color: "#4ea2f0" },
-          { id: "N162", text: "杭州热秀网络技术有限公司", color: "#4ea2f0" },
-          { id: "N163", text: "浙江腾趣网络科技有限公司", color: "#4ea2f0" },
-          { id: "N164", text: "湖南腾湘科技有限公司", color: "#4ea2f0" },
-          { id: "N165", text: "湖南绘装网络科技有限公司", color: "#4ea2f0" },
-          { id: "N166", text: "华谊兄弟传媒股份有限公司", color: "#4ea2f0" },
-          { id: "N167", text: "无锡买卖宝信息技术有限公司", color: "#4ea2f0" },
-          { id: "N168", text: "优扬文化传媒股份有限公司", color: "#4ea2f0" },
-          {
-            id: "N169",
-            text: "武汉鲨鱼网络直播技术有限公司",
-            color: "#4ea2f0",
+            id: "d3",
+            text: "d3",
+            data: {
+              pic: "https://dss0.baidu.com/6ONWsjip0QIZ8tyhnq/it/u=3749144697,3456463661&fm=58&app=83&f=JPEG?w=250&h=250&s=783823D3FE621E94138CC08B030070C2",
+              name: "梁璐",
+              myicon: "el-icon-star-on",
+            },
           },
           {
-            id: "N170",
-            text: "深圳市腾讯网域计算机网络有限公司",
-            color: "#4ea2f0",
-          },
-          { id: "N171", text: "厦门国际金融技术有限公司", color: "#4ea2f0" },
-          { id: "N172", text: "深圳市移卡科技有限公司", color: "#4ea2f0" },
-          {
-            id: "N173",
-            text: "上海企鹅金融信息服务有限公司",
-            color: "#4ea2f0",
+            id: "d4",
+            text: "d4",
+            data: {
+              pic: "https://dss2.baidu.com/6ONYsjip0QIZ8tyhnq/it/u=2263876103,310235844&fm=58&app=83&f=JPEG?w=250&h=250&s=6CE2A944CC1223DC632CC09203009082",
+              name: "刘新建",
+              myicon: "el-icon-setting",
+            },
           },
           {
-            id: "N174",
-            text: "腾安基金销售（深圳）有限公司",
-            color: "#4ea2f0",
+            id: "e",
+            text: "e",
+            data: {
+              pic: "https://dss2.baidu.com/6ONYsjip0QIZ8tyhnq/it/u=3590139977,3135325708&fm=58&app=83&f=JPEG?w=250&h=250&s=2F1C8B46C4A214BCE100A81A03004091",
+              name: "欧阳菁",
+              myicon: "el-icon-setting",
+            },
           },
           {
-            id: "N175",
-            text: "深圳微众金融科技集团股份有限公司",
-            color: "#4ea2f0",
-          },
-          { id: "N176", text: "深圳瓶子科技有限公司", color: "#4ea2f0" },
-          {
-            id: "N177",
-            text: "上海冠润创业投资合伙企业（有限合伙）",
-            color: "#4ea2f0",
+            id: "e1",
+            text: "e1",
+            data: {
+              pic: "https://dss1.baidu.com/6ONXsjip0QIZ8tyhnq/it/u=2110325119,1633583088&fm=58&app=83&f=JPEG?w=120&h=120&s=971E35C05A43305DCA7C1C0B030080C",
+              name: "吴心怡",
+              myicon: "el-icon-star-on",
+            },
           },
           {
-            id: "N178",
-            text: "深圳前海微众银行股份有限公司",
-            color: "#4ea2f0",
-          },
-          { id: "N179", text: "北京英克必成科技有限公司", color: "#4ea2f0" },
-          { id: "N180", text: "和泰人寿保险股份有限公司", color: "#4ea2f0" },
-          {
-            id: "N181",
-            text: "北京知道创宇信息技术股份有限公司",
-            color: "#4ea2f0",
-          },
-          { id: "N182", text: "常州哈酷那软件科技有限公司", color: "#4ea2f0" },
-          {
-            id: "N183",
-            text: "腾讯云计算（北京）有限责任公司",
-            color: "#4ea2f0",
+            id: "e2",
+            text: "e2",
+            data: {
+              pic: "https://dss1.baidu.com/6ONXsjip0QIZ8tyhnq/it/u=4153440298,254451173&fm=58&app=83&f=JPEG?w=250&h=250&s=07C2B4488C42D355548CC41F010080D1",
+              name: "蔡成功",
+              myicon: "el-icon-setting",
+            },
           },
         ],
-        links: [
-          { from: "N2", to: "N1", text: "" },
-          { from: "N3", to: "N1", text: "" },
-          { from: "N4", to: "N1", text: "" },
-          { from: "N5", to: "N1", text: "" },
-          { from: "N1", to: "N6", text: "出资:100%" },
-          { from: "N1", to: "N7", text: "出资:100%" },
-          { from: "N1", to: "N8", text: "出资:95%" },
-          { from: "N1", to: "N9", text: "出资:37.22%" },
-          { from: "N1", to: "N10", text: "出资:0%" },
-          { from: "N1", to: "N11", text: "出资:100%" },
-          { from: "N11", to: "N12", text: "出资:51%" },
-          { from: "N11", to: "N13", text: "出资:30%" },
-          { from: "N11", to: "N14", text: "出资:57.8%" },
-          { from: "N1", to: "N15", text: "出资:95%" },
-          { from: "N15", to: "N16", text: "出资:100%" },
-          { from: "N15", to: "N17", text: "出资:10%" },
-          { from: "N15", to: "N18", text: "出资:100%" },
-          { from: "N15", to: "N19", text: "出资:100%" },
-          { from: "N1", to: "N20", text: "出资:51%" },
-          { from: "N20", to: "N21", text: "出资:44%" },
-          { from: "N1", to: "N22", text: "出资:20.23%" },
-          { from: "N1", to: "N23", text: "出资:19.12%" },
-          { from: "N1", to: "N24", text: "出资:0%" },
-          { from: "N1", to: "N25", text: "出资:14.68%" },
-          { from: "N1", to: "N26", text: "出资:100%" },
-          { from: "N1", to: "N27", text: "出资:16.03%" },
-          { from: "N1", to: "N28", text: "出资:19.9%" },
-          { from: "N1", to: "N29", text: "出资:0%" },
-          { from: "N1", to: "N30", text: "出资:90%" },
-          { from: "N1", to: "N31", text: "出资:29%" },
-          { from: "N31", to: "N32", text: "出资:0.31%" },
-          { from: "N1", to: "N33", text: "出资:95%" },
-          { from: "N33", to: "N34", text: "出资:15%" },
-          { from: "N33", to: "N35", text: "出资:9.61%" },
-          { from: "N1", to: "N36", text: "出资:45%" },
-          { from: "N1", to: "N37", text: "出资:22.82%" },
-          { from: "N1", to: "N120", text: "出资:95%" },
-          { from: "N120", to: "N121", text: "出资:100%" },
-          { from: "N120", to: "N122", text: "出资:99%" },
-          { from: "N120", to: "N123", text: "出资:0%" },
-          { from: "N120", to: "N124", text: "出资:0%" },
-          { from: "N120", to: "N125", text: "出资:44.44%" },
-          { from: "N1", to: "N126", text: "出资:39.05%" },
-          { from: "N1", to: "N127", text: "出资:51%" },
-          { from: "N1", to: "N128", text: "出资:95%" },
-          { from: "N1", to: "N129", text: "出资:50%" },
-          { from: "N1", to: "N130", text: "出资:95%" },
-          { from: "N130", to: "N131", text: "出资:0%" },
-          { from: "N1", to: "N132", text: "出资:51%" },
-          { from: "N132", to: "N133", text: "出资:100%" },
-          { from: "N132", to: "N134", text: "出资:38%" },
-          { from: "N132", to: "N135", text: "出资:15%" },
-          { from: "N132", to: "N136", text: "出资:0%" },
-          { from: "N132", to: "N137", text: "出资:20%" },
-          { from: "N132", to: "N138", text: "出资:0%" },
-          { from: "N132", to: "N139", text: "出资:100%" },
-          { from: "N1", to: "N140", text: "出资:99%" },
-          { from: "N1", to: "N141", text: "出资:95%" },
-          { from: "N141", to: "N142", text: "出资:100%" },
-          { from: "N1", to: "N143", text: "出资:0%" },
-          { from: "N1", to: "N144", text: "出资:8%" },
-          { from: "N1", to: "N145", text: "出资:100%" },
-          { from: "N145", to: "N146", text: "出资:100%" },
-          { from: "N145", to: "N147", text: "出资:100%" },
-          { from: "N1", to: "N148", text: "出资:100%" },
-          { from: "N1", to: "N149", text: "出资:0%" },
-          { from: "N1", to: "N150", text: "出资:12.69%" },
-          { from: "N150", to: "N151", text: "出资:100%" },
-          { from: "N1", to: "N152", text: "出资:51%" },
-          { from: "N152", to: "N153", text: "出资:2.01%" },
-          { from: "N1", to: "N154", text: "出资:39%" },
-          { from: "N1", to: "N155", text: "出资:10.21%" },
-          { from: "N1", to: "N156", text: "出资:100%" },
-          { from: "N156", to: "N157", text: "出资:45%" },
-          { from: "N1", to: "N158", text: "出资:100%" },
-          { from: "N1", to: "N159", text: "出资:10.06%" },
-          { from: "N1", to: "N160", text: "出资:1.52%" },
-          { from: "N1", to: "N161", text: "出资:51%" },
-          { from: "N161", to: "N162", text: "出资:0%" },
-          { from: "N161", to: "N163", text: "出资:100%" },
-          { from: "N1", to: "N164", text: "出资:51%" },
-          { from: "N164", to: "N165", text: "出资:5%" },
-          { from: "N1", to: "N166", text: "出资:7.88%" },
-          { from: "N1", to: "N167", text: "出资:47.53%" },
-          { from: "N1", to: "N168", text: "出资:9%" },
-          { from: "N1", to: "N169", text: "出资:51.72%" },
-          { from: "N1", to: "N170", text: "出资:29%" },
-          { from: "N170", to: "N171", text: "出资:3.89%" },
-          { from: "N170", to: "N172", text: "出资:3.83%" },
-          { from: "N170", to: "N173", text: "出资:100%" },
-          { from: "N170", to: "N174", text: "出资:100%" },
-          { from: "N170", to: "N175", text: "出资:0%" },
-          { from: "N170", to: "N176", text: "出资:100%" },
-          { from: "N170", to: "N177", text: "出资:0%" },
-          { from: "N170", to: "N178", text: "出资:21.43%" },
-          { from: "N1", to: "N179", text: "出资:100%" },
-          { from: "N179", to: "N180", text: "出资:15%" },
-          { from: "N179", to: "N181", text: "出资:10.5%" },
-          { from: "N179", to: "N182", text: "出资:24.84%" },
-          { from: "N179", to: "N183", text: "出资:20%" },
+        lines: [
+          {
+            from: "a",
+            to: "b",
+          },
+          {
+            from: "b",
+            to: "b1",
+          },
+          {
+            from: "b",
+            to: "b2",
+          },
+          {
+            from: "b",
+            to: "b3",
+          },
+          {
+            from: "b",
+            to: "b4",
+          },
+          {
+            from: "b",
+            to: "b5",
+          },
+          {
+            from: "b",
+            to: "b6",
+          },
+          {
+            from: "a",
+            to: "c",
+          },
+          {
+            from: "c",
+            to: "c1",
+          },
+          {
+            from: "c",
+            to: "c2",
+          },
+          {
+            from: "c",
+            to: "c3",
+          },
+          {
+            from: "a",
+            to: "d",
+          },
+          {
+            from: "d",
+            to: "d1",
+          },
+          {
+            from: "d",
+            to: "d2",
+          },
+          {
+            from: "d",
+            to: "d3",
+          },
+          {
+            from: "d",
+            to: "d4",
+          },
+          {
+            from: "a",
+            to: "e",
+          },
+          {
+            from: "e",
+            to: "e1",
+          },
+          {
+            from: "e",
+            to: "e2",
+          },
+          {
+            from: "d",
+            to: "d3",
+            text: "Link2",
+            color: "rgba(255, 120, 0, 1)",
+            lineWidth: 1,
+            data: {},
+          },
+          {
+            from: "d3",
+            to: "d",
+            text: "Link3",
+            color: "rgba(0, 206, 209, 1)",
+            isReverse: true,
+            lineWidth: 1,
+            lineShape: 1,
+            data: {},
+          },
+          {
+            from: "d3",
+            to: "d",
+            text: "Link3",
+            color: "rgba(144, 240, 144, 0.5)",
+            isHideArrow: true,
+            lineWidth: 5,
+            lineShape: 3,
+            data: {},
+          },
         ],
       };
-      console.log(JSON.stringify(__graph_json_data));
-      // __graph_json_data.nodes.forEach((thisNode) => {
-      //   if (thisNode.text === "深圳市腾讯计算机系统有限公司") {
-      //     thisNode.width = 300;
-      //     thisNode.height = 100;
-      //     thisNode.offset_x = -80;
-      //   }
-      //   if (
-      //     thisNode.text === "张志东" ||
-      //     thisNode.text === "陈一丹" ||
-      //     thisNode.text === "许晨晔" ||
-      //     thisNode.text === "马化腾"
-      //   ) {
-      //     thisNode.width = 100;
-      //     thisNode.height = 80;
-      //     thisNode.offset_y = 80;
-      //   }
-      //   // 为节点《这个节点原本是没有子节点的》设置属性expandHolderPosition，使其在没有子节点的情况下也能显示【展开/收缩】按钮，当点击展开时动态加载子节点数据
-      //   if (thisNode.text === "这个节点原本是没有子节点的") {
-      //     thisNode.data = { asyncChild: true, loaded: false }; // 这是一个自定义属性，用来在后续判断如果点击了这个节点，则动态获取数据
-      //     thisNode.expandHolderPosition = "bottom";
-      //     thisNode.expanded = false;
-      //   }
-      // });
-      setTimeout(
-        function () {
-          this.g_loading = false;
-          this.$refs.seeksRelationGraph.setJsonData(
-            __graph_json_data,
-            (seeksRGGraph) => {
-              // 这些写上当图谱初始化完成后需要执行的代码
-            }
-          );
-        }.bind(this),
-        1000
+      this.$refs.seeksRelationGraph.setJsonData(
+        graphData,
+        (graphInstance) => {}
       );
-    },
-    onNodeExpand(node, e) {
-      //模拟动态加载数据
-      if (
-        node.data &&
-        node.data.asyncChild === true &&
-        node.data.loaded === false
-      ) {
-        this.g_loading = true;
-        node.data.loaded = true;
-        setTimeout(
-          function () {
-            this.g_loading = false;
-            var _new_json_data = {
-              nodes: [
-                { id: node.id + "-child-1", text: node.id + "-的子节点1" },
-                { id: node.id + "-child-2", text: node.id + "-的子节点2" },
-                { id: node.id + "-child-3", text: node.id + "-的子节点3" },
-              ],
-              links: [
-                { from: node.id, to: node.id + "-child-1", text: "动态子节点" },
-                { from: node.id, to: node.id + "-child-2", text: "动态子节点" },
-                { from: node.id, to: node.id + "-child-3", text: "动态子节点" },
-              ],
-            };
-            this.$refs.seeksRelationGraph.appendJsonData(
-              _new_json_data,
-              (seeksRGGraph) => {
-                // 这些写上当图谱初始化完成后需要执行的代码
-              }
-            );
-          }.bind(this),
-          1000
-        );
-        return;
-      }
     },
   },
 };
 </script>
 
-<!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped></style>

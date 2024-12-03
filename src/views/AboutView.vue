@@ -17,6 +17,7 @@
     <number-input
       @sendValue="getData"
       :default="true"
+      :changeNum="true"
       :isDecimal="true"
       :money="true"
       :negative="true"
@@ -24,8 +25,10 @@
       :decimalCount="9"
       lang="zh-CN"
       :moneyOption="{ style: 'currency', currency: 'CNY' }"
-      :max="9999999999.99"
     >
+    </number-input>
+    <number-input  :decimalCount="6">
+
     </number-input>
     <!-- <ef-inputnumber @getValue="handleInput" v-model="num1"></ef-inputnumber> -->
     <button @click="num = 23">赋值</button>
